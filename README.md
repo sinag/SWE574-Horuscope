@@ -1,4 +1,4 @@
-![coverage](https://img.shields.io/badge/coverage----blue) ![contributers](https://img.shields.io/badge/contributors-3-lightgrey) ![issues](https://img.shields.io/badge/issues-5%20open-yellowgreen)
+![coverage](https://img.shields.io/badge/coverage----blue) ![contributers](https://img.shields.io/badge/contributors-3-lightgrey) ![issues](https://img.shields.io/badge/issues-3%20open-yellowgreen)
 # < Project Name >
 ```
                             Boğaziçi University Software Engineering Graduate Program
