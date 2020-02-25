@@ -1,5 +1,5 @@
 ![coverage](https://img.shields.io/badge/coverage----blue) ![contributers](https://img.shields.io/badge/contributors-3-lightgrey) ![issues](https://img.shields.io/badge/issues-0%20open-green)
-# City HoruScope
+# Acropolis
 ```
                             Boğaziçi University Software Engineering Graduate Program
                                     SWE574 - Software Development As A Team
