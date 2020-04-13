@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load datatype_tags %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <p class="text-muted">
+                Search Results for {{ view.kwargs.datatype_id|datatype_name }}
+            </p>
+            {% if instances %}
+                {% for instance in instances %}
+                    <div class="card shadow-lg mb-3">
+                        <div class="card text-center">
+                            <div class="card-header text-white bg-secondary">
+                                Created by {{ instance.author.username }} @ {{ instance.created_on }}
+                            </div>
+                            <div class="card-body">
+                                {% if instance.datatype.generic %}
+                                    {% for field in instance.fields %}
+                                        {% if forloop.counter == 1 %}
+                                            <h5 class="card-title">{% property_value instance.id field.id field.type %}</h5>
+                                        {% else %}
+                                            <p class="card-text">{% property_value instance.id field.id field.type %}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="row text-left">
+                                        <div class="col-sm-2"></div>
+                                        <div class="col-sm-8">
+                                            <form class="form" role="form" autocomplete="off" novalidate>
+                                                {% for field in instance.fields %}
+                                                    <div class="form-group">
+                                                        {% if field.name != 'Semantic Tags' %}
+                                                            <label for="id_{{ field.name }}">{{ field.name }}</label>
+                                                            <input type="{{ field.type|field_type_to_input_type }}"
+                                                                   class="form-control form-control-lg rounded"
+                                                                   name="{{ field.name }}"
+                                                                   id="id_{{ field.name }}"
+                                                                   value="{% property_value instance.id field.id field.type %}"
+                                                                   disabled>
+                                                        {% else %}
+                                                            <label for="tags{{ instance.id }}{{ field.id }}">{{ field.name }}</label>
+                                                            <select
+                                                                    id="tags{{ instance.id }}{{ field.id }}"
+                                                                    name="{{ field.name }}"
+                                                                    class="js-data-example-ajax form-control form-control-lg rounded"
+                                                                    multiple="multiple"
+                                                                    disabled>
+                                                            </select>
+                                                            <script>
+                                                                $(document).ready(function () {
+                                                                    var vals{{ instance.id }}{{ field.id }} = '{% property_value instance.id field.id field.type %}'.split(',');
+                                                                    vals{{ instance.id }}{{ field.id }}.forEach(function (e) {
+                                                                        if (!$ajax{{ instance.id }}{{ field.id }}.find('option:contains(' + e + ')').length)
+                                                                            $ajax{{ instance.id }}{{ field.id }}.append($('<option>').text(e));
+                                                                    });
+                                                                    $ajax{{ instance.id }}{{ field.id }}.val(vals{{ instance.id }}{{ field.id }}).trigger("change");
+                                                                });
+                                                                var $ajax{{ instance.id }}{{ field.id }} = $("#tags{{ instance.id }}{{ field.id }}");
+
+                                                                function formatRepo(repo) {
+                                                                    if (repo.loading) return repo.text;
+                                                                    var markup = "<option id=" + repo.id + ">" + repo.id + "-" + repo.description + "<option>";
+                                                                    return markup;
+                                                                }
+
+                                                                function formatRepoSelection(repo) {
+                                                                    return repo.id;
+                                                                }
+
+                                                                $ajax{{ instance.id }}{{ field.id }}.select2({
+                                                                    ajax{{ instance.id }}{{ field.id }}: {
+                                                                        url: "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&format=json&callback=?&",
+                                                                        dataType: 'json',
+                                                                        delay: 250,
+                                                                        results: function (data, page) {
+                                                                            return {
+                                                                                results: $.map(data.search, function (item) {
+                                                                                    return {
+                                                                                        id: item.id + "-" + item.label,
+                                                                                        text: item.text
+                                                                                    };
+                                                                                })
+                                                                            };
+                                                                        },
+                                                                        multiple: true,
+                                                                        data: function (params) {
+                                                                            return {
+                                                                                search: params.term
+                                                                            };
+                                                                        },
+                                                                        success: function (item) {
+                                                                        },
+                                                                        processResults: function (data, page) {
+                                                                            return {
+                                                                                results: $.map(data.search, function (item) {
+                                                                                    return {
+                                                                                        id: item.id + "-" + item.label,
+                                                                                        text: item.text,
+                                                                                        description: item.description
+                                                                                    };
+                                                                                })
+                                                                            };
+                                                                        },
+                                                                        cache: true
+                                                                    },
+                                                                    escapeMarkup: function (markup) {
+                                                                        return markup;
+                                                                    },
+                                                                    minimumInputLength: 3,
+                                                                    templateResult: formatRepo,
+                                                                    templateSelection: formatRepoSelection
+                                                                });
+                                                            </script>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                    </div>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                    {% if instance.author == request.user %}
+                                        <a href="{% url 'instance:update' instance.id %}"
+                                           class="btn btn-primary"><span class="fas fa-edit"></span> Update
+                                            Post</a>
+                                        <a href="{% url 'instance:delete' instance.datatype.id instance.id %}"
+                                           class="btn btn-primary"><span class="fas fa-trash-alt"></span> Delete
+                                            Post</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div style="display: flex; justify-content: space-around">
+                                    <div>Post Type: {{ instance.datatype.name }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="card shadow-lg mb-3">
+                    <div class="card text-center">
+                        <div class="card-header text-white bg-secondary">
+                            Oops, no post found!
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">There is nothing here</h5>
+                            <p class="card-text">Click plus icon below to create a new post</p>
+                            <a class="btn btn-primary" href="{% url 'instance:create' view.kwargs.datatype_id %}"><span
+                                    class="fas fa-comment-dots"></span> New Post</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Just now
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+.container {
+    width: auto;
+    max-width: 680px;
+    padding: 0 15px;
+}
+
+.navbar {
+    background: none;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da !important;
+}
+
+@media screen and (min-width: 100px) and (max-width: 2200px) {
+    .select2 {
+        width: 100% !important;
+        height: 48px !important;
+    }
+}
+
+.select2-selection__choice {
+    margin-top: 10px !important;
+}
+
+.select2-selection {
+    height: 48px !important;
+    border: 1px solid #ced4da !important;
+}
+
+.select2-search--inline{
+    margin-top: 5px !important;
+}
+
+.card-img-top{
+  max-width:100%;
+  max-height:100%;
+}

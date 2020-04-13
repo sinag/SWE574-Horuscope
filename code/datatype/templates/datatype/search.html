@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load datatype_tags %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Search {{ view.kwargs.datatype_id|datatype_name }} Posts</h4>
+            </div>
+            <div class="card-body">
+                <form class="form needs-validation" role="form" autocomplete="off" id="new_community_form" method="post"
+                      novalidate>
+                    {% csrf_token %}
+                    {% datatype_fields view.kwargs.datatype_id as fields_from_datatype %}
+                    {% for field in fields_from_datatype %}
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.name }}</label>
+                            <input type="{{ field.type|field_type_to_input_type }}"
+                                   class="form-control form-control-lg rounded"
+                                   name="{{ field.name }}"
+                                   id="id_{{ field.name }}"
+                            >
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnSearch">Search</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

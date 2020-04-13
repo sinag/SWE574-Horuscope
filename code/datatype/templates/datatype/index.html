@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load datatype_tags %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <p class="text-muted">
+               Post Types for {{ view.kwargs.community_id|community_name }}
+            </p>
+            {% if datatypes %}
+                {% for datatype in datatypes %}
+                    <div class="card shadow-lg mb-3">
+                        <div class="card text-center">
+                            <div class="card-header text-white bg-secondary">
+                                Created by {{ datatype.author.username }} @ {{ datatype.created_on }}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ datatype.name }}</h5>
+                                <p class="card-text">{{ datatype.description }}</p>
+                                <a href="{% url 'datatype:search' view.kwargs.community_id datatype.id %}"
+                                   class="btn btn-primary"><span
+                                        class="fas fa-search"></span> Search</a>
+                            <a href="{% url 'property:index' datatype.id %}"
+                                   class="btn btn-primary"><span
+                                        class="fas fa-list"></span> View Fields</a>
+                                {% if user.is_authenticated %}
+                                    {% if datatype.author == request.user %}
+                                        {% if datatype.generic == False %}
+                                            <a href="{% url 'datatype:update' view.kwargs.community_id datatype.id %}"
+                                               class="btn btn-primary"><span class="fas fa-edit"></span> Update
+                                                Post Type</a>
+                                            <a href="{% url 'datatype:delete' view.kwargs.community_id datatype.id %}"
+                                               class="btn btn-primary"><span class="fas fa-trash-alt"></span> Delete
+                                                Post Type</a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                <a class="btn btn-primary" href="{% url 'instance:create' datatype.id %}"><span class="fas fa-comment-dots"></span> New
+                                    Post</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div style="display: flex; justify-content: space-around">
+                                    <div>{{ datatype.id|field_count }} Fields</div>
+                                    <div>{{ datatype.get_generic_display }} Post Type</div>
+                                    <div>{{ datatype.id|post_count }} Posts</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="card shadow-lg mb-3">
+                    <div class="card text-center">
+                        <div class="card-header text-white bg-secondary">
+                            Oops, no post type found!
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">There is nothing here</h5>
+                            <p class="card-text">Click plus icon below to create a new post type</p>
+                            <a href="{% url 'datatype:create' view.kwargs.community_id %}" class="btn btn-primary"><span class="fas fa-plus"></span> New Post Type</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Just now
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}

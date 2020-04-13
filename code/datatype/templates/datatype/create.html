@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Create Post Type</h4>
+            </div>
+            <div class="card-body">
+                <form class="form needs-validation" role="form" autocomplete="off" id="new_community_form" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name">Name</label>
+                        <input type="text" class="form-control form-control-lg rounded" maxlength="100" name="name"
+                               id="id_name"
+                               required>
+                        <div class="invalid-feedback">Oops, you missed name.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_description">Description</label>
+                        <textarea type="text" class="form-control form-control-lg rounded" maxlength="500" name="description"
+                               id="id_description"
+                               required></textarea>
+                        <div class="invalid-feedback">Oops, you missed description.</div>
+                    </div>
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">Save</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

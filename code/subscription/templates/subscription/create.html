@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Subscribe to Community - {{ community.name }}</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" role="form" autocomplete="off" id="delete_confirm_form" method="post">
+                    {% csrf_token %}
+                    <p class="card-text">Hi {{ request.user.username }}, you are one click away from joining community "{{ community.name }}"</p>
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnJoin">Join</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
