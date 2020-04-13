@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load instance_tags %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Update {{ view.kwargs.pk|datatype_name_from_instance_id }} Post</h4>
+            </div>
+            <div class="card-body">
+                <form class="form needs-validation" role="form" autocomplete="off" id="new_community_form" method="post"
+                      novalidate>
+                    {% csrf_token %}
+                    {% datatype_fields_from_instance_id view.kwargs.pk as fields_from_instance %}
+                    {% for field in fields_from_instance %}
+                        <div class="form-group">
+                            {% if field.name != 'Semantic Tags' %}
+                                <label for="id_{{ field.name }}">{{ field.name }}</label>
+                                <input type="{{ field.type|field_type_to_input_type }}"
+                                       class="form-control form-control-lg rounded"
+                                       name="{{ field.name }}"
+                                       id="id_{{ field.name }}"
+                                       value="{% property_value view.kwargs.pk field.id field.type %}"
+                                        {% if field.required %} required{% endif %}>
+                            {% else %}
+                                <label for="tags">{{ field.name }}</label>
+                                <input type="hidden" id="hdn_tags" name="hdn_tags">
+                                <select id="tags"
+                                        name="{{ field.name }}"
+                                        class="js-data-example-ajax form-control form-control-lg rounded"
+                                        multiple="multiple" {% if field.required %}required{% endif %}></select>
+                                <script>
+                                    $(document).ready(function () {
+                                        var vals = '{% property_value view.kwargs.pk field.id field.type %}'.split(',');
+                                        vals.forEach(function (e) {
+                                            if (!$ajax.find('option:contains(' + e + ')').length)
+                                                $ajax.append($('<option>').text(e));
+                                        });
+                                        $ajax.val(vals).trigger("change");
+                                    });
+                                    var $ajax = $("#tags");
+
+                                    function formatRepo(repo) {
+                                        if (repo.loading) return repo.text;
+                                        var markup = "<option id=" + repo.id + ">" + repo.id + "-" + repo.description + "<option>";
+                                        return markup;
+                                    }
+
+                                    function formatRepoSelection(repo) {
+                                        return repo.id;
+                                    }
+
+                                    $ajax.select2({
+                                        ajax: {
+                                            url: "https://www.wikidata.org/w/api.php?action=wbsearchentities&language=en&format=json&callback=?&",
+                                            dataType: 'json',
+                                            delay: 250,
+                                            results: function (data, page) {
+                                                return {
+                                                    results: $.map(data.search, function (item) {
+                                                        return {
+                                                            id: item.id + "-" + item.label,
+                                                            text: item.text
+                                                        };
+                                                    })
+                                                };
+                                            },
+                                            multiple: true,
+                                            data: function (params) {
+                                                return {
+                                                    search: params.term
+                                                };
+                                            },
+                                            success: function (item) {
+                                            },
+                                            processResults: function (data, page) {
+                                                return {
+                                                    results: $.map(data.search, function (item) {
+                                                        return {
+                                                            id: item.id + "-" + item.label,
+                                                            text: item.text,
+                                                            description: item.description
+                                                        };
+                                                    })
+                                                };
+                                            },
+                                            cache: true
+                                        },
+                                        escapeMarkup: function (markup) {
+                                            return markup;
+                                        },
+                                        minimumInputLength: 3,
+                                        templateResult: formatRepo,
+                                        templateSelection: formatRepoSelection
+                                    });
+                                </script>
+                            {% endif %}
+                            {% if field.required %}
+                                <div class="invalid-feedback">Oops, this is a required field.</div>{% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnSave">Confirm</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#btnSave').click(function () {
+            var data = $('#tags').val();
+            var strdata = '';
+            $(data).each(function (e) {
+                strdata += data[e] + ',';
+            });
+            strdata = strdata.substring(0, strdata.length - 1);
+            $('#hdn_tags').val(strdata);
+        });
+    </script>
+{% endblock %}

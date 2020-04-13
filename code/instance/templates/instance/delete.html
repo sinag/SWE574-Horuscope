@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load instance_tags %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Delete {{ view.kwargs.pk|datatype_name_from_instance_id }} Post</h4>
+            </div>
+            <div class="card-body">
+                <form class="form needs-validation" role="form" autocomplete="off" id="new_community_form" method="post"
+                      novalidate>
+                    {% csrf_token %}
+                    {% datatype_fields_from_instance_id view.kwargs.pk as fields_from_instance %}
+                    {% for field in fields_from_instance %}
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.name }}</label>
+                            <input type="{{ field.type|field_type_to_input_type }}" class="form-control form-control-lg rounded"
+                                   name="{{ field.name }}"
+                                   id="id_{{ field.name }}"
+                                   value="{% property_value view.kwargs.pk field.id field.type %}"
+                                   disabled>
+                        </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">Confirm</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
