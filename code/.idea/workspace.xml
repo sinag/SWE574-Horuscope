@@ -21,6 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f0778f17-c949-4104-8f59-8791842e4777" name="Default Changelist" comment="owner save method added&#10;delete and edit functions are mapped to owner">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,6 +159,7 @@
       <workItem from="1586776984072" duration="694000" />
       <workItem from="1586794262814" duration="1787000" />
       <workItem from="1586849776489" duration="358000" />
+      <workItem from="1586933033676" duration="1569000" />
     </task>
     <task id="LOCAL-00001" summary="initial code commit">
       <created>1572191270472</created>
@@ -247,19 +249,20 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
