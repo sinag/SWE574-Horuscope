@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'property.apps.PropertyConfig',
     'datatype.apps.DatatypeConfig',
     'instance.apps.InstanceConfig',
+    'userprofile.apps.UserprofileConfig',
     'subscription.apps.SubscriptionConfig',
     'users.apps.UsersConfig',
     'community.apps.CommunityConfig',
