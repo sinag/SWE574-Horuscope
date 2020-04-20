@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load community_tags %}
+{% load base_template_tags %}
 {% block content %}
     <div class="row">
         <div class="col-sm-2"></div>
@@ -158,6 +159,17 @@
                                         <a href="{% url 'instance:delete' instance.datatype.id instance.id %}"
                                            class="btn btn-primary"><span class="fas fa-trash-alt"></span> Delete
                                             Post</a>
+                                    {% else %}
+                                        {% is_flagged_by_user instance.id as flagged_by_user %}
+                                        {% if flagged_by_user %}
+                                            {% get_flag_id_from_user_and_instance instance.id as flag_id %}
+                                            <a href="{% url 'flag:delete' flag_id %}"
+                                               class="btn btn-primary"><span class="fas fa-flag"></span> Unflag Post</a>
+                                        {% else %}
+
+                                            <a href="{% url 'flag:create' instance.id %}"
+                                               class="btn btn-primary"><span class="fas fa-flag"></span> Flag Post</a>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             </div>

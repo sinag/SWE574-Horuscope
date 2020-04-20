@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'subscription.apps.SubscriptionConfig',
     'users.apps.UsersConfig',
     'community.apps.CommunityConfig',
+    'flag.apps.FlagConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
