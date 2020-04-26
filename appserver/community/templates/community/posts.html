@@ -151,6 +151,8 @@
                                         <div class="col-sm-2"></div>
                                     </div>
                                 {% endif %}
+                                <a href="{% url 'comment:comments' instance.id %}"
+                                           class="btn btn-primary"><span class="fas fa-comments"></span> View Comments</a>
                                 {% if user.is_authenticated %}
                                     {% if instance.author == request.user %}
                                         <a href="{% url 'instance:update' instance.id %}"

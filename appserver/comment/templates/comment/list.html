@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container">
-	<h2 style="margin-bottom: 1em">Comments <small class="float-right text-muted" style="line-height: 1.5">{{ comments.count }} comments</small></h2>
+	<h2 style="margin-bottom: 1em">Comments <small class="float-right text-muted" style="line-height: 1.5">{{ comments.count }} comment(s)</small></h2>
     {% if comments %}
         {% for comment in comments %}
             <div class="card" style="margin-bottom: 0.5em">
