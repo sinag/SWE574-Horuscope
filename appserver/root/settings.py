@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'community.apps.CommunityConfig',
     'flag.apps.FlagConfig',
+    'comment.apps.CommentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

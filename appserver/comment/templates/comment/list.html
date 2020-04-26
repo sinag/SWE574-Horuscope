@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+	<h2 style="margin-bottom: 1em">Comments <small class="float-right text-muted" style="line-height: 1.5">{{ comments.count }} comments</small></h2>
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="card" style="margin-bottom: 0.5em">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                        </div>
+                        <div class="col-md-10">
+                            <p>
+                                {# TODO: Update user profile link when user profile links are provided #}
+                                <a class="float-left" href="/userprofile/{{ comment.created_by.id }}"><strong>{{ comment.created_by.first_name}} {{ comment.created_by.last_name}}</strong></a>
+                                <span class="text-secondary float-right date-as-ago" title="{{ comment.created_on }}">{{ comment.created_on }}</span>
+                           </p>
+                           <div class="clearfix" style="margin-bottom: 1em"></div>
+                            <p>{{ comment.body }}</p>
+                            {% if comment.created_by.id == user.id %}
+                            <p>
+                                <a class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'comment:delete' comment.id %}"> <i class="fa fa-trash"></i> Delete</a>
+                                <a class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'comment:update' comment.id %}">  <i class="fa fa-edit"></i> Edit</a>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'comment:create' instance.id %}" class="btn btn-outline-primary btn-block"><i class="fa fa-plus"></i> New Comment</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script>
+        $(".date-as-ago").text(function () {
+            return moment($(this).text(), "MMM D, YYYY, h:mm a").fromNow()
+        })
+    </script>
+{% endblock %}
