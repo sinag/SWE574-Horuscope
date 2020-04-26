@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="row">
-        Hello World
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0"> Welcome {{ userName }} {{ request.user.username }} </h4>
+            </div>
+            <div class="card-body">
+                <figure class="figure">
+                    <img src="" class="figure-img img-fluid rounded" alt="...">
+                    <figcaption class="figure-caption">UserProfilePic</figcaption>
+                </figure>
+                <h5 class="mb-1">Username: {{ username }} </h5>
+                <h5 class="mb-1">First Name: {{ firstname }} </h5>
+                <h5 class="mb-1">Date Joined: {{ datejoined }} </h5>
+            </div>
+        </div>
+        <h5></h5>
+        <div>
+            <div class="card rounded lg">
+            <div class="card-header text-white bg-info">
+                <h4 class="mb-0"> {{ request.user.username }}'s Posts</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="mb-1"> Post or Activity Stream Placeholder </h5>
+            </div>
+        </div>
+    </div>
     </div>
 {% endblock %}
