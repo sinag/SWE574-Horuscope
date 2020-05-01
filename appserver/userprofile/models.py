@@ -1,18 +1,16 @@
 from django.contrib.auth.models import User , AbstractUser
 from django.db import models
+from root import settings
 
 
 class UserProfile(models.Model):
-    #TODO: I was not able to get here from the
-    #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    userName = "A Username that should come from django.contrib.auth.models"
-    firstName = "Users First Name"
-    dateJoined = "When the user is joined"
-    def __str__(self):
-        return self.username
 
+    user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, default=settings.DEFAULT_ADMIN,
+                                   blank=False, null=False, db_index=True)
     def __str__(self):
-        return self.firstName
+        return str(self.id)
+    
+    class Meta:
+        verbose_name = "user"
+        verbose_name_plural = "users"
 
-    def __str__(self):
-        return self.dateJoined
