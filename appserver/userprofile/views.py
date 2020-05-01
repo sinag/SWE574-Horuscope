@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.shortcuts import redirect
 from django.urls import reverse, path
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView, FormMixin
@@ -36,5 +37,6 @@ class CreateView(CreateView):
 
     def get_success_url(self):
         instance_id = self.kwargs.get('instance_id')
-        return reverse('userprofile:profile_page', args=(instance_id,))
+        username = 5
+        return redirect('userprofile:profile_page', username = username)
 
