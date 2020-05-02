@@ -17,13 +17,15 @@ class CreateView(CreateView):
 
 
     def get_context_data(self, **kwargs):
+        userid = [3]
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['user_name'] = Instance.objects.all().filter(id=self.kwargs.get('id')).first()
         print("get_context_data runs")
         print(context['user_name'])
-        return context
+        userid[0] = UserProfile.objects.get(user_name=self.kwargs.get('user_name'))
+        return userid
 
     def form_valid(self, form):
         """
@@ -37,6 +39,9 @@ class CreateView(CreateView):
 
     def get_success_url(self):
         instance_id = self.kwargs.get('instance_id')
-        username = 5
-        return redirect('userprofile:profile_page', username = username)
+        userid = UserProfile.objects.filter(id=self.kwargs.get('pk')).first().instance_id
+        print("get_success_url")
+        print(userid)
+
+        return redirect('userprofile:profile_page', userid = userid)
 

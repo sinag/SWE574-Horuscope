@@ -8,7 +8,7 @@ class UserProfile(models.Model):
     user_name = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, default=settings.DEFAULT_ADMIN,
                                    blank=False, null=False, db_index=True)
     def __str__(self):
-        return str(self.id)
+        return str(self.user_name)
     
     class Meta:
         verbose_name = "user"
