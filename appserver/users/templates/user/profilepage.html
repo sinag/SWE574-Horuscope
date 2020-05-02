@@ -10,9 +10,9 @@
                     <img src="" class="figure-img img-fluid rounded" alt="...">
                     <figcaption class="figure-caption">UserProfilePic</figcaption>
                 </figure>
-                <h5 class="mb-1">Username: {{ request.user.username }} </h5>
-                <h5 class="mb-1">First Name: {{ request.user.first_name }} </h5>
-                <h5 class="mb-1">Date Joined: {{ request.user.date_joined }} </h5>
+                <h5 class="mb-1">Username: {{ user.email }} </h5>
+                <h5 class="mb-1">First Name: {{ user.first_name }} </h5>
+                <h5 class="mb-1">Bio : {{ user.bio }} </h5>
             </div>
         </div>
         <h5></h5>

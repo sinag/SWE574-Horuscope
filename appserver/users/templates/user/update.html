@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-header text-white bg-secondary">
+                <h4 class="mb-0">Update Profile</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" role="form" autocomplete="off" id="flag_confirm_form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_bio">Bio</label>
+                        <textarea type="text" class="form-control form-control-lg rounded" maxlength="500"
+                                  name="bio"
+                                  id="id_bio"
+                                  required>{{ user.bi}}</textarea>
+                        <div class="invalid-feedback">Please enter your comment.</div>
+                    </div>
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-success btn-lg float-right" id="btnJoin">Save Profile</button>
+                    <a href="{{ view.get_success_url }}" class="mr-1 btn btn-success btn-lg float-right">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

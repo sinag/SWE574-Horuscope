@@ -72,8 +72,6 @@
                         <span class="fas fa-user"></span> Welcome {{ user.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'userprofile:profile_page' 3 %}"><span class="fas fa-headphones"></span>
-                            Your Profile</a>
                         <a class="dropdown-item" href="{% url 'logout' %}"><span class="fas fa-sign-out-alt"></span>
                             Logout</a>
                         <a class="dropdown-item" href="{% url 'password_reset' %}"><span class="fas fa-key"></span>Password
