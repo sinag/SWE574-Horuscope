@@ -1,19 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from rest_framework import viewsets, generics, permissions
+from rest_framework import viewsets
 from users.serializers import UserSerializer
-
-
-# class UserList(generics.ListCreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#
-#
-# class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAdminUser]
 
 
 class UserViewSet(viewsets.ModelViewSet):
