@@ -1,8 +1,19 @@
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from rest_framework import permissions
+from django.contrib.auth.models import User
+from rest_framework import viewsets, generics, permissions
 from users.serializers import UserSerializer
+
+
+# class UserList(generics.ListCreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAdminUser]
+#
+#
+# class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAdminUser]
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -11,9 +22,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        hashed_password = make_password(serializer.validated_data['password']) # get the hashed password
+        hashed_password = make_password(serializer.validated_data['password'])  # get the hashed password
         serializer.validated_data['password'] = hashed_password
-        user = super(UserViewSet, self).perform_create(serializer) # create a user
+        user = super(UserViewSet, self).perform_create(serializer)  # create a user
+

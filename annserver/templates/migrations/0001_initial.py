@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(blank=True, default='', max_length=100)),
             ],
             options={
-                'verbose_name': 'template',
+                'verbose_name': 'templates',
                 'verbose_name_plural': 'templates',
                 'ordering': ['created'],
             },
