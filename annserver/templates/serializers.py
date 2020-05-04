@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from template.models import Template
+from templates.models import Template
 
 
 class TemplateSerializer(serializers.ModelSerializer):

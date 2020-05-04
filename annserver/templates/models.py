@@ -7,5 +7,5 @@ class Template(models.Model):
 
     class Meta:
         ordering = ['created']
-        verbose_name = "template"
+        verbose_name = "templates"
         verbose_name_plural = "templates"
