@@ -33,7 +33,7 @@
                                                     <div class="form-group">
                                                         {% if field.name != 'Semantic Tags' %}
                                                             <label for="id_{{ field.name }}">{{ field.name }}</label>
-                                                            {% if field.type == 6 or field.type == 4 or field.type == 5 or field.type == 9 %}
+                                                            {% if field.type == 6 or field.type == 4 or field.type == 5 or field.type == 9 or field.type == 10 %}
                                                                 {% if field.type == 9 %}
                                                                     <div class="form-group rounded mx-auto d-block card-img-top embed-responsive embed-responsive-16by9">
                                                                     {% autoescape off %}
@@ -58,6 +58,9 @@
                                                                         <source src="{% property_value instance.id field.id field.type %}"
                                                                                 type="audio/ogg">
                                                                     </audio>
+                                                                {% endif %}
+                                                                {% if field.type == 10 %}
+                                                                    <p style="white-space: pre-wrap;">{% property_value instance.id field.id field.type %}</p>
                                                                 {% endif %}
                                                             {% else %}
                                                                 <input type="{{ field.type|field_type_to_input_type }}"

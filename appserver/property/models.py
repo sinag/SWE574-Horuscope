@@ -22,6 +22,7 @@ class Property(models.Model):
         (7, 'Email'),
         (8, 'URL'),
         (9, 'Location'),
+        (10, 'MultilineText')
     ]
     generic_choices = [
         (0, 'Custom'),
