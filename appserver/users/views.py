@@ -14,11 +14,12 @@ class SignUpView(CreateView):
 class ViewProfilePage(generic.ListView):
     model = CustomUser
     template_name = 'user/profilepage.html'
-    context_object_name = 'user'
+    context_object_name = 'users'
 
+    ## gets any users page with PK and returns to page as a queryset
     def get_queryset(self):
-        print(CustomUser.objects.filter(id=self.kwargs.get('pk')).first())
-        return CustomUser.objects.filter(id=self.kwargs.get('pk')).first()
+        print(CustomUser.objects.filter(id=self.kwargs.get('pk')).values('email'))
+        return CustomUser.objects.filter(id=self.kwargs.get('pk'))
 
 '''  def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

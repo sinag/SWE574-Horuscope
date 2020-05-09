@@ -13,7 +13,15 @@
                         <textarea type="text" class="form-control form-control-lg rounded" maxlength="500"
                                   name="bio"
                                   id="id_bio"
-                                  required>{{ user.bi}}</textarea>
+                                  required>{{ user.bio}}</textarea>
+                        <div class="invalid-feedback">Please enter your comment.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_profile_pic">Profile Picture</label>
+                        <textarea type="text" class="form-control form-control-lg rounded" maxlength="500"
+                                  name="profile_pic"
+                                  id="id_profile_pic"
+                                  required>{{ user.bio}}</textarea>
                         <div class="invalid-feedback">Please enter your comment.</div>
                     </div>
                     {% if form.errors %}
