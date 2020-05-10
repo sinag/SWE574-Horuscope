@@ -72,7 +72,7 @@
                         <span class="fas fa-user"></span> Welcome {{ user.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'userprofile:profile_page' %}"><span class="fas fa-headphones"></span>
+                        <a class="dropdown-item" href="{% url 'users:view' pk=request.user.id %}"><span class="fas fa-sign-out-alt"></span>
                             Your Profile</a>
                         <a class="dropdown-item" href="{% url 'logout' %}"><span class="fas fa-sign-out-alt"></span>
                             Logout</a>
@@ -82,7 +82,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}"><span class="fas fa-user"></span> Sign Up</a>
+                        <a class="nav-link" href="{% url 'users:signup' %}"><span class="fas fa-user"></span> Sign Up</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}"><span class="fas fa-sign-in-alt"></span> Login</a>

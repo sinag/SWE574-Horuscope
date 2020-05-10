@@ -12,7 +12,8 @@
                     <div class="card shadow-lg mb-3">
                         <div class="card text-center">
                             <div class="card-header text-white bg-secondary">
-                                Created by {{ community.author.username }} @ {{ community.created_on }}
+                                Created by
+                                    <a class="nav-link" href="{% url 'users:view' pk=community.author.id %}"><span class="fas fa-user"></span> {{ community.author.username }}</a> @ {{ community.created_on }}
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ community.name }}</h5>

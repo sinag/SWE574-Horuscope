@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="card rounded shadow-lg">
+            <div class="card-body">
+                    {% for user in users %}
+                        {% if request.user.username == user.username  %}
+                        <div class="card-header text-white bg-secondary">
+                            <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'users:update' pk=request.user.id  %}">  <i class="fa fa-edit"></i> Edit</h4>
+                            <h4 class="mb-0"> Welcome {{ request.user.username }} </h4>
+                            <a class="btn btn-primary" href="{% url 'users:update' pk=request.user.id  %}" role="button">Edit Your Profile</a>
+                        </div>
+                        {% endif %}
+                    <figure class="figure">
+                        <img src="{{ user.profile_pic }}" class="figure-img img-fluid rounded" alt="...">
+                    </figure>
+                        <h5 class="mb-1">Username: {{ user.username }} </h5>
+                        <h5 class="mb-1">First Name: {{ user.first_name }}  </h5>
+                        <h5 class="mb-1">Bio : {{ user.bio }} </h5>
+                    {% endfor %}
+        </div>
+    </div>
+    </div>
+{% endblock %}
