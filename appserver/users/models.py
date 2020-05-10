@@ -12,7 +12,10 @@ class CustomUser(AbstractUser):
     profile_pic = models.URLField(max_length=2000, blank=True)
 
     def __str__(self):
-        return self.first_name
+        return self.user_name
 
-    def __str__(self):
-        return self.last_name
+    '''def __str__(self):
+        return self.first_name'''
+
+    '''def __str__(self):
+        return self.last_name'''

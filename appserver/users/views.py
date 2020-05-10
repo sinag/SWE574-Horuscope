@@ -17,8 +17,10 @@ class ViewProfilePage(generic.ListView):
     context_object_name = 'users'
 
     ## gets any users page with PK and returns to page as a queryset
+    '''def get_queryset(self):
+        return CustomUser.objects.filter(id=self.kwargs.get('pk'))'''
+
     def get_queryset(self):
-        print(CustomUser.objects.filter(id=self.kwargs.get('pk')).values('email'))
         return CustomUser.objects.filter(id=self.kwargs.get('pk'))
 
 '''  def get_context_data(self, **kwargs):
@@ -31,12 +33,11 @@ class ViewProfilePage(generic.ListView):
 
 class UpdateProfilePage(UpdateView):
     model = CustomUser
-    fields = ['bio', 'profile_pic']
+    fields = ['bio', 'profile_pic',]
     template_name = 'user/update.html'
 
     def get_success_url(self):
         user_id = CustomUser.objects.filter(id=self.kwargs.get('pk')).first().id
-        #return reverse('users:userview', args=(user_id,))
         return reverse('users:view', args=(user_id,))
 
     def get_queryset(self):
