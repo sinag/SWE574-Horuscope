@@ -26,7 +26,7 @@ class CreateView(FormView):
                                 author=self.request.user)
             instance.save()
             for field in DataType.objects.get(id=self.kwargs.get('datatype_id')).fields():
-                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9:
+                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9 or field.type == 10:
                     if field.name == 'Semantic Tags':
                         value = TextField(value=form.data['hdn_tags'], property_id=field.id, instance_id=instance.id)
                         value.save()
@@ -73,7 +73,7 @@ class DeleteView(FormView):
         with transaction.atomic():
             instance = Instance.objects.get(id=self.kwargs.get('pk'))
             for field in DataType.objects.get(id=instance.datatype_id).fields():
-                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9:
+                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9 or field.type == 10:
                     value = TextField.objects.filter(instance_id=instance.id).filter(property_id=field.id)
                     value.delete()
                 if field.type == 1:
@@ -107,7 +107,7 @@ class UpdateView(FormView):
             instance = Instance.objects.get(id=self.kwargs.get('pk'))
 
             for field in DataType.objects.get(id=instance.datatype.id).fields():
-                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9:
+                if field.type == 0 or field.type == 4 or field.type == 5 or field.type == 6 or field.type == 7 or field.type == 8 or field.type == 9 or field.type == 10:
                     textfield = TextField.objects.filter(instance_id=instance.id).filter(property_id=field.id).first()
                     if field.name == 'Semantic Tags':
                         new_value = form.data['hdn_tags']
