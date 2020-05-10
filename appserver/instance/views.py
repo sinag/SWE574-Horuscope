@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.urls import reverse
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 from datatype.models import DataType
 from datetimefield.models import DateTimeField
 from instance.forms import DynamicPost
@@ -150,3 +150,15 @@ class UpdateView(FormView):
         return reverse('community:posts',
                        kwargs={
                            'pk': Instance.objects.get(id=self.kwargs.get('pk')).datatype.community.id})
+
+class PostView(ListView):
+    template_name = 'instance/view.html'
+    form_class = DynamicPost
+    context_object_name = 'instance'
+
+    def get_queryset(self):
+        """
+        Get instance details
+        """
+        return Instance.objects.select_related('datatype').select_related('datatype__community').filter(
+            id=self.kwargs.get('pk')).first()
