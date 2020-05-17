@@ -1,4 +1,6 @@
+from actstream import action
 from django.db import models
+from django.db.models.signals import post_save
 
 from instance.models import Instance
 from root import settings
@@ -20,3 +22,9 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "comment"
         verbose_name_plural = "comments"
+
+
+def save_comment(sender,instance,**kwargs):
+    action.send(instance.created_by, verb="Commented", description=instance.body, action_object=instance)
+
+post_save.connect(save_comment, sender=Comment)

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load activity_tags %}
     <div class="container mt-3">
         <div class="card rounded shadow-lg">
             <div class="card-body">
@@ -18,7 +19,22 @@
                         <h5 class="mb-1">First Name: {{ user.first_name }}  </h5>
                         <h5 class="mb-1">Bio : {{ user.bio }} </h5>
                     {% endfor %}
-        </div>
+            </div>
+            <div class="card-body">
+                <div class="card-header text-white bg-secondary">
+                            <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'users:update' pk=request.user.id  %}">  <i class="fa fa-edit"></i> Edit</h4>
+
+                    <div>
+                        {% for user in users %}
+                        <h4 class="mb-0"> Activity of {{ user.username }} </h4>
+                            {% activity_stream 'actor' user %}
+                                {% for action in stream %}
+                                    {% display_action action %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
     </div>
     </div>
 {% endblock %}

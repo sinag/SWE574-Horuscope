@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
 from root import settings
+from actstream import signals, action
 from django.contrib.auth import get_user_model
 
 """
@@ -21,3 +23,8 @@ class Community(models.Model):
     class Meta:
         verbose_name = "community"
         verbose_name_plural = "communities"
+
+def save_community(sender,instance,**kwargs):
+    action.send(instance.author, verb="Created a new Community", description="deneme", action_object=instance)
+
+post_save.connect(save_community, sender=Community)
