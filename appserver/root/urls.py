@@ -28,5 +28,7 @@ urlpatterns = [
     path('comment/', include('comment.urls')),
     path('admin/', admin.site.urls),
     path('users/', include('django.contrib.auth.urls')),
-    path('', RedirectView.as_view(pattern_name='community:index'))
+    path('^activity/', include('actstream.urls')),
+    path('', RedirectView.as_view(pattern_name='community:index')),
+
 ]
