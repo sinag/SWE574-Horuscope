@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load instance_tags %}
+
 {% block content %}
+  <div class="ui right very wide sidebar" style="padding: 1em;">
+
+    <h2 style="border-bottom: 1px solid #CCC; margin-bottom: 1em;">Annotations<button id="close-sidebar" style="cursor: pointer;" class="btn btn-outline-secondary float-right"><i class="fa fa-times"></i></button></h2>
+    <div id="new-annotation-form" style="display: none;">
+        <h5 id="annotating-text">Target: <span class="badge badge-secondary"></span></h5>
+        <textarea id="annotation-body" style="width: 100%; margin: 1em 0; padding: 0.5em;" placeholder="Write your annotation..." rows="6"></textarea>
+        <button type="button" class="btn btn-primary float-right" id="create-annotation-button"><i class="fa fa-save"></i> Save Annotation</button>
+        <details id="annotation-model"><pre></pre></details>
+    </div>
+    <div id="annotation-display" style="display: none;">
+        <h5 id="annotated-text">Target: <span class="badge badge-secondary"></span></h5>
+        <div id="annotation-author"></div>
+        <div id="annotation-body-display" style="width: 100%; margin: 1em 0; padding: 0.5em;border: 1px solid #CCC;border-radius: 5px;"></div>
+    </div>
+  </div>
+  <div class="pusher">
     <div class="container mt-3" style="max-width: 1024px;">
         <div class="card rounded shadow-lg">
             <div class="card-header text-white bg-secondary">
@@ -14,6 +32,9 @@
                             <div class="col-md-4" style="padding: 10px 15px;""><label><b>{{ field.name }}</b></label></div>
                             <div class="col-md-8" style="padding: 10px 15px;">
                                 {% if field.name != 'Semantic Tags' %}
+                                    {% if field.type == 0 or field.type == 1 or field.type == 2 or field.type == 7 or field.type == 8 or field.type == 10 %}
+                                        <section id="post-field-{{ field.id }}" class="annotatable" style="white-space: pre-wrap">{% property_value instance.id field.id field.type %}</section>
+                                    {% endif %}
                                     {% if field.type == 9 %}
                                     <div class="form-group rounded mx-auto d-block card-img-top embed-responsive embed-responsive-16by9">
                                         {% autoescape off %}
@@ -21,9 +42,13 @@
                                         {% endautoescape %}
                                     </div>
                                     {% elif field.type == 6 %}
-                                        <div style="width: 100%;">
-                                            <img style="max-width: 200px;max-height: 200px;width: auto;height: auto;" src="{% property_value instance.id field.id field.type %}" class="img-thumbnail" />
+
+                                        <div style="display: inline-block; position: relative;" class="img-thumbnail annotatable-image">
+                                            <div></div>
+                                            <img style="max-width: 200px;max-height: 200px;width: auto;height: auto;"  src="{% property_value instance.id field.id field.type %}" />
                                         </div>
+
+
                                     {% elif field.type == 4 %}
                                         <video class="rounded mx-auto d-block card-img-top"
                                                controls>
@@ -36,14 +61,6 @@
                                             <source src="{% property_value instance.id field.id field.type %}"
                                                     type="audio/ogg">
                                         </audio>
-                                    {% elif field.type == 10 %}
-                                        <p style="white-space: pre-wrap"
-                                           id="id_{{ field.name }}"
-                                           {% if field.required %}required{% endif %}>{% property_value view.kwargs.pk field.id field.type %}</p>
-                                    {%  else %}
-                                        <div>
-                                               {% property_value view.kwargs.pk field.id field.type %}
-                                        </div>
                                     {% endif %}
                                 {% else %}
                                     <input type="hidden" id="hdn_tags" name="hdn_tags">
@@ -125,4 +142,13 @@
             </div>
         </div>
     </div>
+    </div>
+    <link rel="stylesheet" href="{% static '../static/hrs-annotator.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/sidebar.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/transition.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/transition.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/sidebar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/popup.min.js"></script>
+    <script type="text/javascript" src="{% static '../static/hrs-annotator.js' %}"></script>
 {% endblock %}

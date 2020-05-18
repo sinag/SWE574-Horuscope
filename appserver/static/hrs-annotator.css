@@ -1,0 +1,65 @@
+article p{
+    white-space: pre-wrap;
+}
+span.annotation-highlight{
+    background-color: skyblue;
+    display: inline-block;
+    position: relative;
+}
+span.saved-annotation {
+    border: 2px dashed cornflowerblue;
+    border-radius: 5px;
+    cursor: pointer;
+}
+span.saved-annotation.active {
+    background: #d0f0fb;
+}
+
+span.saved-annotation:hover {
+    border: 2px dashed skyblue;
+}
+#annotate-text-button, #annotate-image-button{
+    padding: 0;
+}
+#annotate-image-button{
+    margin-bottom: 2px;
+}
+
+.sidebar{
+    background: #FFF;
+    /*top: 3.5em !important;*/
+}
+#annotate-text-button:before, #annotate-image-button:before{
+    display: none;
+}
+
+#annotation-model {
+    margin-top: 3em;
+}
+.annotatable-image > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+.image-annotation-marker-candidate{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 120%, #81e8f6, #76deef 10%, #057ad7 80%, #0772b6 100%);
+    border: 1px solid #FFF;
+    cursor: pointer;
+}
+.image-annotation-marker-candidate:before {
+  content: "";
+  position: absolute;
+  top: 1%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 0px, #ffffff, rgba(255, 255, 255, 0) 58%);
+  filter: blur(5px);
+  z-index: 2;
+}
