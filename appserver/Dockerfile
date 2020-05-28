@@ -6,3 +6,6 @@ COPY requirements.txt /appserver/
 RUN pip install -r requirements.txt
 COPY . /appserver/
 RUN chmod +x /appserver/docker-entrypoint.sh
+EXPOSE 8000
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/appserver/docker-entrypoint.sh"]

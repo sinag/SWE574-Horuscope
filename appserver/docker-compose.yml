@@ -7,9 +7,11 @@
         - POSTGRES_DB=hrs
         - POSTGRES_USER=django
         - POSTGRES_PASSWORD=django
+      container_name: appserver-db
     web:
       build: .
       command: python manage.py runserver 0.0.0.0:8000
+      container_name: appserver-web
       volumes:
         - .:/appserver
       environment:

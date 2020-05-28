@@ -7,6 +7,7 @@
       environment:
         MONGO_INITDB_ROOT_USERNAME: django
         MONGO_INITDB_ROOT_PASSWORD: django
+      container_name: annserver-db
 
     mongo-express:
       image: mongo-express
@@ -16,6 +17,7 @@
       environment:
         ME_CONFIG_MONGODB_ADMINUSERNAME: django
         ME_CONFIG_MONGODB_ADMINPASSWORD: django
+      container_name: annserver-db-express
 
     web:
       build: .
@@ -24,6 +26,7 @@
         - .:/annserver
       environment:
         - USE_DOCKER=yes
+      container_name: annserver-web
       ports:
         - "9000:9000"
       depends_on:
