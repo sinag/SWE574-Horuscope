@@ -24,7 +24,7 @@ SECRET_KEY = '70p0!=f-2bksp_rlbhnfb6&b8sjw!i^f=4-m*h5mxez^p(2jj('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -72,19 +72,34 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'ENFORCE_SCHEMA': True,
-        'NAME': 'annserver',
-        'HOST': 'localhost',
-        'PORT': 27017,
-        'USER': 'django',
-        'PASSWORD': 'django',
-        'AUTH_SOURCE': 'admin',
-        'AUTH_MECHANISM': 'SCRAM-SHA-1',
+if 'USE_DOCKER' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'djongo',
+            'ENFORCE_SCHEMA': True,
+            'NAME': 'annserver',
+            'HOST': 'mongo',
+            'PORT': 27017,
+            'USER': 'django',
+            'PASSWORD': 'django',
+            'AUTH_SOURCE': 'admin',
+            'AUTH_MECHANISM': 'SCRAM-SHA-1',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'djongo',
+            'ENFORCE_SCHEMA': True,
+            'NAME': 'annserver',
+            'HOST': 'localhost',
+            'PORT': 27017,
+            'USER': 'django',
+            'PASSWORD': 'django',
+            'AUTH_SOURCE': 'admin',
+            'AUTH_MECHANISM': 'SCRAM-SHA-1',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
