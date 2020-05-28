@@ -24,7 +24,7 @@ SECRET_KEY = 'h4@*l_1ggfh$%d@h*8+0jqt#53803+jurdnwx5%bq95a8+gv#-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -81,20 +81,20 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-if 'RDS_HOSTNAME' in os.environ:
-    DEFAULT_ADMIN = 2
+DEFAULT_ADMIN = 1
+if 'USE_DOCKER' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': 'hrs',
+            'USER': 'django',
+            'PASSWORD': 'django',
+            'HOST': 'db',
+            'PORT': '5432',
         }
     }
 else:
-    DEFAULT_ADMIN = 7
+    DEFAULT_ADMIN = 1
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -105,7 +105,6 @@ else:
             'PORT': '5432',
         }
     }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

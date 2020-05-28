@@ -9,7 +9,7 @@ Community object model
 
 
 class Community(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, default=0,
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, default=1,
                                blank=False, null=False, db_index=True)
     name = models.CharField(max_length=100, blank=False, null=False)
     created_on = models.DateTimeField(auto_now_add=True, blank=False, null=False)
