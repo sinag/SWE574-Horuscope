@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'h4@*l_1ggfh$%d@h*8+0jqt#53803+jurdnwx5%bq95a8+gv#-'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -29,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
     'datetimefield.apps.DatetimefieldConfig',
     'integerfield.apps.IntegerfieldConfig',
     'textfield.apps.TextfieldConfig',
@@ -42,11 +44,23 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'actstream',
 ]
+
+
+SITE_ID = 1
+
+ACTSTREAM_SETTINGS = {
+    'MANAGER': 'users.managers.MyActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': False,
+    'GFK_FETCH_DEPTH': 1,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
