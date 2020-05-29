@@ -29,16 +29,6 @@ class ViewProfilePage(generic.ListView):
         user_id = 10
         return reverse('users:view', request)
 
-'''  def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['instance'] = Instance.objects.all().filter(id=self.kwargs.get('instance_id')).get()
-        return context'''
-
-
-
-
 
 class UpdateProfilePage(UpdateView):
     model = CustomUser
