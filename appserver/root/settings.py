@@ -48,11 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # This_DjangoActstream_Setting
     'actstream',
 ]
 
 
 SITE_ID = 1
+# This_DjangoActstream_Settings
 
 ACTSTREAM_SETTINGS = {
     'MANAGER': 'users.managers.MyActionManager',

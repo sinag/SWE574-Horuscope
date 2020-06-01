@@ -25,6 +25,7 @@
                             <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'users:update' pk=request.user.id  %}">  <i class="fa fa-edit"></i> Edit</h4>
 
                     <div>
+                    <!-- # This_DjangoActstream_HTML-->
                         {% for user in users %}
                         <h4 class="mb-0"> Activity of {{ user.username }} </h4>
                             {% activity_stream 'actor' user %}

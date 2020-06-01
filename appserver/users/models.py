@@ -13,9 +13,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.user_name
-
-    '''def __str__(self):
-        return self.first_name'''
-
-    '''def __str__(self):
-        return self.last_name'''

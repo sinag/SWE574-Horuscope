@@ -17,16 +17,12 @@ class ViewProfilePage(generic.ListView):
     template_name = 'user/profilepage.html'
     context_object_name = 'users'
 
-    ## gets any users page with PK and returns to page as a queryset
-    '''def get_queryset(self):
-        return CustomUser.objects.filter(id=self.kwargs.get('pk'))'''
-
     def get_queryset(self):
         return CustomUser.objects.filter(id=self.kwargs.get('pk'))
 
+    # This_DjangoActstream_Function
     def follow_user(request):
         follow(request.user, user=CustomUser.objects.filter(id=request.kwargs.get('pk')))
-        user_id = 10
         return reverse('users:view', request)
 
 
