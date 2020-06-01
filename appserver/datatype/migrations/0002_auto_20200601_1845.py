@@ -11,13 +11,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('community', '0001_initial'),
+        ('datatype', '0001_initial'),
+        ('community', '0002_community_author'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='community',
+            model_name='datatype',
             name='author',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='datatype',
+            name='community',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='community.Community'),
         ),
     ]

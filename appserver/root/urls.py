@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.views.generic.base import TemplateView, RedirectView
 
 urlpatterns = [
+    path('activitystreams/', include('activitystream.urls')),
     path('instance/', include('instance.urls')),
     path('properties/', include('property.urls')),
     path('subscriptions/', include('subscription.urls')),
@@ -28,6 +29,6 @@ urlpatterns = [
     path('comment/', include('comment.urls')),
     path('admin/', admin.site.urls),
     path('users/', include('django.contrib.auth.urls')),
-    path('', RedirectView.as_view(pattern_name='community:index')),
+    path('', RedirectView.as_view(pattern_name='activitystream:index')),
 
 ]

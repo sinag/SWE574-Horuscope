@@ -12,15 +12,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Instance',
+            name='ActivityStream',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('updated_on', models.DateTimeField(auto_now_add=True)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('data', models.TextField()),
             ],
             options={
-                'verbose_name': 'instance',
-                'verbose_name_plural': 'instances',
+                'verbose_name': 'activitystream',
+                'verbose_name_plural': 'activitystreams',
+                'ordering': ['created'],
             },
         ),
     ]

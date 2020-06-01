@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load activitystream_tags %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <p class="text-muted">
+                Activity Stream
+            </p>
+            {% if activitystreams %}
+                <div class="card shadow-lg mb-3">
+                    <div class="card text-center">
+                        <div class="card-header text-white bg-secondary">
+                            Activities for {{ user.username }}
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {% for activitystream in activitystreams %}
+                                <a href="{% if activitystream.data|delete == False %}{{ activitystream.data|object }}{% else %}#{% endif %}"
+                                   class="list-group-item list-group-item-action">{{ activitystream.data|summary }} {{ activitystream.data|published }}</a>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div style="display: flex; justify-content: space-around">
+                                <div>Count: {{ activitystreams|length }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card shadow-lg mb-3">
+                    <div class="card text-center">
+                        <div class="card-header text-white bg-secondary">
+                            Oops, no activity found!
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">There is nothing here</h5>
+                            <p class="card-text">Contribute to HoruScope to see some activities here :)</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Just now
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
