@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -25,7 +27,12 @@ class Community(models.Model):
         verbose_name = "community"
         verbose_name_plural = "communities"
 
-# @receiver(post_save, sender=Community)
-# def create_activity(sender, **kwargs):
-#    ActivityStream.objects.create(data="")
-#    pass
+
+@receiver(post_save, sender=Community)
+def create_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"Sina "
+                                       "created '" + instance.name + "' community\", \"type\": \"Create Community\", \"actor\": "
+                                       "\"http://127.0.0.1/users/view/"+ str(instance.author_id) +"\", \"object\": "
+                                       "\"http://127.0.0.1/communities/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://127.0.0.1/users/view/"+ str(instance.author_id) +"\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+    pass
