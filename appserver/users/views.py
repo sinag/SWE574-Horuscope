@@ -1,8 +1,7 @@
-from actstream.actions import follow
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.views import generic
-from .models import AbstractUser, CustomUser
+from .models import CustomUser
 
 from .forms import CustomUserCreationForm
 

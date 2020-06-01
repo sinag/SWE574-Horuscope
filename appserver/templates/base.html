@@ -24,6 +24,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
+            <li class="nav-item{% if "/activitystreams/" == request.path %} active{% endif %}">
+                <a class="nav-link" href="{% url 'activitystream:index' %}"><span class="fas fa-hashtag"></span> Home
+                    {% if "/" == request.path %}
+                        <span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
             <li class="nav-item{% if "/communities/" == request.path %} active{% endif %}">
                 <a class="nav-link" href="{% url 'community:index' %}"><span class="fas fa-hashtag"></span> Communities
                     {% if "/" == request.path %}

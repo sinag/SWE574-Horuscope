@@ -6,6 +6,8 @@ from property.models import Property
 """
 DateTime field object model
 """
+
+
 class DateTimeField(models.Model):
     value = models.DateTimeField(blank=True, null=True)
     instance = models.ForeignKey(Instance, on_delete=models.PROTECT, blank=False, null=False, db_index=True)

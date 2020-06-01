@@ -10,14 +10,20 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('instance', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('community', '0001_initial'),
+        ('flag', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='community',
-            name='author',
+            model_name='flag',
+            name='created_by',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='flag',
+            name='instance',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='instance.Instance'),
         ),
     ]
