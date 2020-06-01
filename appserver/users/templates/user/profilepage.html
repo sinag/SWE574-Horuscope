@@ -23,7 +23,12 @@
             <div class="card-body">
                 <div class="card-header text-white bg-secondary">
                             <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm" href="{% url 'users:update' pk=request.user.id  %}">  <i class="fa fa-edit"></i> Edit</h4>
-
+                    {% for user in users %}
+                        {% if request.user|is_following:user %}
+                        {% else %}
+                            <a class="btn btn-primary" href="{% follow_url user  %}" role="button">Follow</a>
+                        {% endif %}
+                    {% endfor %}
                     <div>
                         {% for user in users %}
                         <h4 class="mb-0"> Activity of {{ user.username }} </h4>

@@ -1,4 +1,6 @@
-from actstream.actions import follow
+from actstream.actions import follow, unfollow
+from actstream.models import actor_stream,user_stream,model_stream
+from actstream.views import user
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.views import generic
@@ -12,21 +14,21 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+
 class ViewProfilePage(generic.ListView):
     model = CustomUser
     template_name = 'user/profilepage.html'
     context_object_name = 'users'
 
-    ## gets any users page with PK and returns to page as a queryset
-    '''def get_queryset(self):
-        return CustomUser.objects.filter(id=self.kwargs.get('pk'))'''
-
-    def get_queryset(self):
-        return CustomUser.objects.filter(id=self.kwargs.get('pk'))
+    def get_queryset(request):
+        return CustomUser.objects.filter(id=request.kwargs.get('pk'))
 
     def follow_user(request):
-        follow(request.user, user=CustomUser.objects.filter(id=request.kwargs.get('pk')))
-        user_id = 10
+        follow(user, CustomUser.objects.filter(id=request.kwargs.get('pk')))
+        return reverse('users:view', request)
+
+    def unfollow_user(request):
+        #unfollow(request.user, user=CustomUser.objects.filter(id=request.kwargs.get('pk')))
         return reverse('users:view', request)
 
 
@@ -40,7 +42,7 @@ class UpdateProfilePage(UpdateView):
         return reverse('users:view', args=(user_id,))
 
     def get_queryset(self):
-        """
-        Get comment details to update
-        """
         return CustomUser.objects.filter(id=self.kwargs.get('pk'))
+
+
+
