@@ -12,6 +12,7 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+
 class ViewProfilePage(generic.ListView):
     model = CustomUser
     template_name = 'user/profilepage.html'
@@ -20,15 +21,10 @@ class ViewProfilePage(generic.ListView):
     def get_queryset(self):
         return CustomUser.objects.filter(id=self.kwargs.get('pk'))
 
-    # This_DjangoActstream_Function
-    def follow_user(request):
-        follow(request.user, user=CustomUser.objects.filter(id=request.kwargs.get('pk')))
-        return reverse('users:view', request)
-
 
 class UpdateProfilePage(UpdateView):
     model = CustomUser
-    fields = ['bio', 'profile_pic',]
+    fields = ['bio', 'profile_pic', ]
     template_name = 'user/update.html'
 
     def get_success_url(self):
