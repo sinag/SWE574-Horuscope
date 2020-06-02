@@ -6,3 +6,6 @@ COPY requirements.txt /annserver/
 RUN pip install -r requirements.txt
 COPY . /annserver/
 RUN chmod +x /annserver/docker-entrypoint.sh
+EXPOSE 81
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/annserver/docker-entrypoint.sh"]

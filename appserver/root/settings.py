@@ -85,7 +85,9 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DEFAULT_ADMIN = 1
+
 if 'USE_DOCKER' in os.environ:
+    SERVER_ADDRESS = os.environ['SERVER_ADDRESS']
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -97,7 +99,7 @@ if 'USE_DOCKER' in os.environ:
         }
     }
 else:
-    DEFAULT_ADMIN = 1
+    SERVER_ADDRESS = "127.0.0.1"
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
