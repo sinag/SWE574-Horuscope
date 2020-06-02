@@ -1,6 +1,13 @@
+import datetime
+
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from activitystream.models import ActivityStream
 from instance.models import Instance
 from root import settings
+from root.settings import SERVER_ADDRESS
 
 """
 Comment model
@@ -20,3 +27,13 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "comment"
         verbose_name_plural = "comments"
+
+
+@receiver(post_save, sender=Comment)
+def create_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"Sina "
+                                       "created new comment under post '" + instance.instance.title() + "'\", \"type\": \"Create Comment\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+    pass

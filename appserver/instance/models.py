@@ -7,6 +7,8 @@ from root import settings
 """
 Instance object model
 """
+
+
 class Instance(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, default=settings.DEFAULT_ADMIN,
                                blank=False, null=False, db_index=True)
@@ -17,6 +19,16 @@ class Instance(models.Model):
 
     def fields(self):
         return Property.objects.all().filter(datatype=self.datatype.id)
+
+    def title(self):
+        from textfield.models import TextField
+        from property.models import Property
+        title_property = Property.objects.filter(datatype_id=self.datatype_id).first()
+        result = TextField.objects.filter(instance_id=self.id).filter(property_id=title_property.id).first()
+        if result is not None:
+            return result.value
+        else:
+            return ''
 
     def __str__(self):
         return str(self.id)
