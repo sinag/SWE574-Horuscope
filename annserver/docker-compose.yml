@@ -21,14 +21,14 @@
 
     web:
       build: .
-      command: python manage.py runserver 0.0.0.0:9000
+      command: python manage.py runserver 0.0.0.0:81
       volumes:
         - .:/annserver
       environment:
         - USE_DOCKER=yes
       container_name: annserver-web
       ports:
-        - "9000:9000"
+        - "81:81"
       depends_on:
         - mongo
       entrypoint: /annserver/docker-entrypoint.sh

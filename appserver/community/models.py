@@ -7,6 +7,7 @@ from django.dispatch import receiver
 
 from activitystream.models import ActivityStream
 from root import settings
+from root.settings import SERVER_ADDRESS
 
 """
 Community object model
@@ -32,7 +33,7 @@ class Community(models.Model):
 def create_activity(sender, instance, **kwargs):
     ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"Sina "
                                        "created '" + instance.name + "' community\", \"type\": \"Create Community\", \"actor\": "
-                                       "\"http://127.0.0.1/users/view/"+ str(instance.author_id) +"\", \"object\": "
-                                       "\"http://127.0.0.1/communities/" + str(instance.id) + "\", \"target\": "
-                                       "\"http://127.0.0.1/users/view/"+ str(instance.author_id) +"\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/"+ str(instance.author_id) +"\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/"+ str(instance.author_id) +"\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
     pass
