@@ -9,6 +9,7 @@ sudo service docker start
 git clone https://github.com/sinag/SWE574-Horuscope
 cd SWE574-Horuscope
 cd appserver
+update serveraddress
 sudo docker-compose up &
 cd ..
 cd annserver
