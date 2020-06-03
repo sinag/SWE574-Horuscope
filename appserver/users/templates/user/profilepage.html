@@ -4,7 +4,6 @@
 <div class="container mt-3">
     <div class="card rounded shadow-lg">
         <div class="card-body">
-            {% for user in users %}
             {% if request.user.username == user.username %}
             <div class="card-header text-white bg-secondary">
                 <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm"
@@ -19,9 +18,9 @@
                 <h4 class="mb-0">{{ user.username }}'s Profile</h4>
             </div>
                 {% endif %}
-                {% if user.profile_pic == "" %}
+                {% if not user.profile_pic %}
                 <figure class="figure">
-                    <img src="{}" class="figure-img img-fluid rounded" width="200">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" class="figure-img img-fluid rounded" width="200">
                 </figure>
                 {% else %}
                 <figure class="figure">
@@ -32,7 +31,6 @@
                 <div style="display: block"> <h5 style="display: inline;" class="mb-1">First Name:  </h5> {{ user.first_name }} </div>
                 <div style="display: block"> <h5 style="display: inline;" class="mb-1">Last Name:  </h5> {{ user.last_name }} </div>
                 <div style="display: block"> <h5 style="display: inline;" class="mb-1">Bio : </h5> {{ user.bio }} </div>
-                {% endfor %}
             </div>
         </div>
     </div>

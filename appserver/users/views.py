@@ -15,10 +15,10 @@ class SignUpView(CreateView):
 class ViewProfilePage(generic.ListView):
     model = CustomUser
     template_name = 'user/profilepage.html'
-    context_object_name = 'users'
+    context_object_name = 'user'
 
     def get_queryset(self):
-        return CustomUser.objects.filter(id=self.kwargs.get('pk'))
+        return CustomUser.objects.filter(id=self.kwargs.get('pk')).first()
 
 
 class UpdateProfilePage(UpdateView):
