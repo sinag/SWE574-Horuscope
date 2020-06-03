@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from activitystream.models import ActivityStream
@@ -30,10 +30,18 @@ class Comment(models.Model):
 
 
 @receiver(post_save, sender=Comment)
-def create_activity(sender, instance, **kwargs):
-    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"Sina "
+def create_comment_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.created_by.username + " "
                                        "created new comment under post '" + instance.instance.title() + "'\", \"type\": \"Create Comment\", \"actor\": "
-                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.created_by.id) + "\", \"object\": "
                                        "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.instance.id) + "\", \"target\": "
                                        "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
-    pass
+
+
+@receiver(pre_delete, sender=Comment)
+def delete_comment_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.instance.author.username + " "
+                                       "deleted comment under post '" + instance.instance.title() + "'\", \"type\": \"Delete Comment\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.created_by.id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")

@@ -1,8 +1,14 @@
-from django.db import models
+import datetime
 
+from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+
+from activitystream.models import ActivityStream
 from datatype.models import DataType
 from property.models import Property
 from root import settings
+from root.settings import SERVER_ADDRESS
 
 """
 Instance object model
@@ -36,3 +42,21 @@ class Instance(models.Model):
     class Meta:
         verbose_name = "instance"
         verbose_name_plural = "instances"
+
+
+@receiver(post_save, sender=Instance)
+def create_instance_activity(sender, instance, created, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                        "created new post under community '" + instance.datatype.community.name + "'\", \"type\": \"Create Post\", \"actor\": "
+                                        "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                        "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.id) + "\", \"target\": "
+                                        "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+
+
+@receiver(pre_delete, sender=Instance)
+def delete_instance_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "deleted a post under community '" + instance.datatype.community.name + "'\", \"type\": \"Delete Post\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")

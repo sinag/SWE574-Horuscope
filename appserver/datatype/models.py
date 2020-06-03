@@ -1,7 +1,14 @@
+import datetime
+
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+
+from activitystream.models import ActivityStream
 from community.models import Community
 from property.models import Property
 from root import settings
+from root.settings import SERVER_ADDRESS
 
 """
 Datatype object model
@@ -37,3 +44,28 @@ class DataType(models.Model):
     class Meta:
         verbose_name = "datatype"
         verbose_name_plural = "datatypes"
+
+
+@receiver(post_save, sender=DataType)
+def create_datatype_activity(sender, instance, created, **kwargs):
+    if created:
+        ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "created '" + instance.name + "' post type under community '" + instance.community.name + "'\", \"type\": \"Create DataType\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/properties/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+    else:
+        ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "updated '" + instance.name + "' post type under community '" + instance.community.name + "'\", \"type\": \"Update DataType\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/properties/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+
+
+@receiver(pre_delete, sender=DataType)
+def delete_datatype_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "deleted '" + instance.name + "' post type under community '" + instance.community.name + "'\", \"type\": \"Delete DataType\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/properties/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
