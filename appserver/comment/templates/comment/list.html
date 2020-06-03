@@ -13,7 +13,7 @@
                         <div class="col-md-10">
                             <p>
                                 {# @enderortak I've provided the link for userview #}
-                                <a class="float-left" href="{% url 'users:view' pk=comment.created_by.id %}"><strong>{{ comment.created_by.first_name}} {{ comment.created_by.last_name}}</strong></a>
+                                <a class="float-left" href="{% url 'users:view' pk=comment.created_by.id %}"><strong>{{ comment.created_by.username}}</strong></a>
                                 <span class="text-secondary float-right date-as-ago" title="{{ comment.created_on }}">{{ comment.created_on }}</span>
                            </p>
                            <div class="clearfix" style="margin-bottom: 1em"></div>
