@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from activitystream.models import ActivityStream
@@ -30,10 +30,25 @@ class Community(models.Model):
 
 
 @receiver(post_save, sender=Community)
-def create_activity(sender, instance, **kwargs):
-    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"Sina "
+def create_community_activity(sender, instance, created, **kwargs):
+    if created:
+        ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
                                        "created '" + instance.name + "' community\", \"type\": \"Create Community\", \"actor\": "
-                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"object\": "
                                        "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.id) + "\", \"target\": "
-                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
-    pass
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+    else:
+        ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "updated '" + instance.name + "' community\", \"type\": \"Update Community\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
+
+
+@receiver(pre_delete, sender=Community)
+def delete_community_activity(sender, instance, **kwargs):
+    ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
+                                       "deleted '" + instance.name + "' community\", \"type\": \"Delete Community\", \"actor\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"object\": "
+                                       "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")

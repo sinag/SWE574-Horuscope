@@ -16,7 +16,7 @@
                         <div class="list-group list-group-flush">
                             {% for activitystream in activitystreams %}
                                 <a href="{% if activitystream.data|delete == False %}{{ activitystream.data|object }}{% else %}#{% endif %}"
-                                   class="list-group-item list-group-item-action">{{ activitystream.data|summary }} {{ activitystream.data|published }}</a>
+                                   class="list-group-item list-group-item-action"><span class="fas {{ activitystream.data|icon }}"></span> {{ activitystream.data|summary }} {{ activitystream.data|published }}</a>
                             {% endfor %}
                         </div>
                         <div class="card-footer text-muted">

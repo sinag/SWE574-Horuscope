@@ -33,5 +33,21 @@ def type(object):
 @register.filter
 def delete(object):
     json_data = json.loads(object)
-    a = "Delete" in json_data['type']
     return "Delete" in json_data['type']
+
+
+@register.filter
+def icon(object):
+    result = "fa-bell"
+    json_data = json.loads(object)
+    if "Community" in json_data["type"]:
+        result = "fa-hashtag"
+    if "DataType" in json_data["type"]:
+        result = "fa-folder"
+    if "Comment" in json_data["type"]:
+        result = "fa-comments"
+    if "Post" in json_data["type"]:
+        result = "fa-comment-dots"
+    if "Flag" in json_data["type"]:
+        result = "fa-flag"
+    return result
