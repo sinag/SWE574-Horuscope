@@ -43,6 +43,7 @@ Check if current user flagged a post before.
 def is_flagged_by_user(context, instance_id):
     return Flag.objects.filter(instance_id=instance_id).filter(created_by_id=context['request'].user.id).count() > 0
 
+
 @register.simple_tag(takes_context=True)
 def get_flag_id_from_user_and_instance(context, instance_id):
     return Flag.objects.filter(instance_id=instance_id, created_by_id=context['request'].user.id).first().id

@@ -1,9 +1,6 @@
 from django.db import transaction
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
-from django.views import generic
-from django.views.generic.edit import CreateView, DeleteView, UpdateView, FormMixin
+from django.views.generic.edit import CreateView, DeleteView, FormMixin
 
 from instance.models import Instance
 from .models import Flag
