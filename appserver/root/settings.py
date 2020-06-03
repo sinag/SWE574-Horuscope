@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'subscription.apps.SubscriptionConfig',
     'users.apps.UsersConfig',
     'community.apps.CommunityConfig',
+    'follow.apps.FollowConfig',
     'flag.apps.FlagConfig',
     'comment.apps.CommentConfig',
     'activitystream.apps.ActivitystreamConfig',
