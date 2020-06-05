@@ -1,4 +1,7 @@
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.views import generic
 from .models import CustomUser
@@ -11,13 +14,16 @@ class SignUpView(CreateView):
     template_name = 'signup.html'
 
 
-class ViewProfilePage(generic.ListView):
+class ViewProfilePage(ListView):
     model = CustomUser
     template_name = 'user/profilepage.html'
     context_object_name = 'user'
 
     def get_queryset(self):
-        return CustomUser.objects.filter(id=self.kwargs.get('pk')).first()
+        if self.request.user.is_authenticated:
+            return CustomUser.objects.filter(id=self.kwargs.get('pk')).first()
+        else:
+            return None
 
 class UpdateProfilePage(UpdateView):
     model = CustomUser

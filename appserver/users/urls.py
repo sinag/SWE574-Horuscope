@@ -5,6 +5,6 @@ from .views import SignUpView, UpdateProfilePage, ViewProfilePage
 app_name = 'users'
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
-    path('view/<int:pk>/', login_required(ViewProfilePage.as_view()), name='view'),
+    path('view/<int:pk>/', ViewProfilePage.as_view(), name='view'),
     path('update/<int:pk>/', UpdateProfilePage.as_view(), name='update'),
 ]
