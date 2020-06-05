@@ -3,6 +3,8 @@
 {% load static %}
 {% block content %}
     <div class="container mt-3">
+        {% if request.user.is_authenticated %}
+            Authenticated
         <div class="card rounded shadow-lg">
             <div class="card-body">
                 {% if request.user.username == user.username %}
@@ -53,5 +55,9 @@
                 </div>
             </div>
         </div>
+        {% else %}
+
+        {% endif %}
+
     </div>
 {% endblock %}
