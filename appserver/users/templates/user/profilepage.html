@@ -3,12 +3,11 @@
 {% load static %}
 {% block content %}
     <div class="container mt-3">
+        {% if request.user.is_authenticated %}
         <div class="card rounded shadow-lg">
             <div class="card-body">
                 {% if request.user.username == user.username %}
                     <div class="card-header text-white bg-secondary">
-                        <h4 class="float-right btn btn-outline-secondary ml-2 btn-sm"
-                            href="{% url 'users:update' pk=request.user.id %}"><i class="fa fa-edit"></i> Edit</h4>
                         <h4 class="mb-0"> Welcome {{ request.user.username }}
                             <a class="fas fa-edit" href="{% url 'users:update' pk=request.user.id %}" role="button"
                                style="color: #bbccdd"></a>
@@ -53,5 +52,17 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="card rounded shadow-lg">
+            <div class="card-body">
+                <div class="card-header text-white bg-secondary">
+                    <h4 class="mb-0"> Please Login or Signup to View Profiles </h4>
+                </div>
+                    <a href="{% url 'login' %}" class="btn btn-primary"><span class="fas fa-user"></span> Login</a>
+                    <a href="{% url 'users:signup' %}" class="btn btn-primary"><span class="fas fa-sign-in"></span> Sign Up</a>
+            </div>
+        </div>
+
+        {% endif %}
     </div>
 {% endblock %}
