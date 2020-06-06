@@ -42,8 +42,10 @@
                 </div>
             {% endfor %}
         {% endif %}
+        {% if request.user.is_authenticated %}
         <a href="{% url 'comment:create' instance.id %}" class="btn btn-outline-primary btn-block"><i
                 class="fa fa-plus"></i> New Comment</a>
+        {% endif %}
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"

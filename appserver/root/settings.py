@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'flag.apps.FlagConfig',
     'comment.apps.CommentConfig',
     'activitystream.apps.ActivitystreamConfig',
+    'welcome.apps.WelcomeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sessions',
