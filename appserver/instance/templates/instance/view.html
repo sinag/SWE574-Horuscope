@@ -20,7 +20,7 @@
   </div>
   <div class="pusher">
     <div class="container mt-3" style="max-width: 1024px;">
-        <div class="card rounded shadow-lg">
+        <div class="card rounded shadow-lg" style="margin-bottom: 2em;">
             <div class="card-header text-white bg-secondary">
                 <h4 class="mb-0">Post #{{ instance.id }} - {{ instance.datatype.community.name }}</h4>
             </div>
@@ -28,12 +28,12 @@
                     {% csrf_token %}
                     {% datatype_fields_from_instance_id view.kwargs.pk as fields_from_instance %}
                     {% for field in fields_from_instance %}
-                        <div class="row" style="border-bottom: 1px solid #DDD;">
+                        <div class="row post-field-display-row">
                             <div class="col-md-4" style="padding: 10px 15px;""><label><b>{{ field.name }}</b></label></div>
                             <div class="col-md-8" style="padding: 10px 15px;">
                                 {% if field.name != 'Semantic Tags' %}
                                     {% if field.type == 0 or field.type == 1 or field.type == 2 or field.type == 7 or field.type == 8 or field.type == 10 %}
-                                        <section id="post-field-{{ field.id }}" class="annotatable" style="white-space: pre-wrap">{% property_value instance.id field.id field.type %}</section>
+                                        <section class="annotatable" style="white-space: pre-wrap">{% property_value instance.id field.id field.type %}</section>
                                     {% endif %}
                                     {% if field.type == 9 %}
                                     <div class="form-group rounded mx-auto d-block card-img-top embed-responsive embed-responsive-16by9">

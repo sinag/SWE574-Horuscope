@@ -3,19 +3,19 @@ article p{
 }
 span.annotation-highlight{
     background-color: skyblue;
-    display: inline-block;
+    display: inline;
     position: relative;
 }
-span.saved-annotation {
+.text.saved-annotation {
     border: 2px dashed cornflowerblue;
     border-radius: 5px;
     cursor: pointer;
 }
-span.saved-annotation.active {
+.text.saved-annotation.active {
     background: #d0f0fb;
 }
 
-span.saved-annotation:hover {
+.text.saved-annotation:hover {
     border: 2px dashed skyblue;
 }
 #annotate-text-button, #annotate-image-button{
@@ -43,7 +43,18 @@ span.saved-annotation:hover {
     bottom: 0;
     right: 0;
 }
+#annotated-text span, #annotating-text span{
+    font-weight: normal;
+}
 .image-annotation-marker-candidate{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 120%, #e9f6a4, #eaef15 10%, #b6a313 80%, #b6a313 100%);
+    border: 1px solid #FFF;
+    cursor: pointer;
+}
+.image.saved-annotation{
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -51,7 +62,7 @@ span.saved-annotation:hover {
     border: 1px solid #FFF;
     cursor: pointer;
 }
-.image-annotation-marker-candidate:before {
+.image-annotation-marker-candidate:before, .image.saved-annotation:before{
   content: "";
   position: absolute;
   top: 1%;
@@ -63,3 +74,16 @@ span.saved-annotation:hover {
   filter: blur(5px);
   z-index: 2;
 }
+
+.image.saved-annotation.active {
+    background: #d0f0fb;
+    border-width: 2px;
+}
+
+.image.saved-annotation:hover {
+    border-width: 2px;
+}
+
+ .post-field-display-row:not(:last-child){
+    border-bottom: 1px solid #DDD;
+ }

@@ -1,88 +1,30 @@
 window.annotationCandidate = { target: ""};
+window.savedAnnotations = [];
 window.idCounter = 3;
-window.savedAnnotations = [
-    {
-      "@context": "http://www.w3.org/ns/anno.jsonld",
-      "id": 1,
-      "type": "Annotation",
-      "body": {
-        "type": "TextualBody",
-        "value": "Annotation 1 Lorem ipsum dolor sit amet....",
-        "format": "text/plain"
-      },
-      "target": {
-        "source": "http://127.0.0.1:8000/instance/6",
-        "selector": {
-          "type": "XPathSelector",
-          "value": "id('post-field-11')|Whatever I downed, it got me goin' crazy (Yah)"
+
+
+var annotationServerAuth = function (xhr) {
+            var username = "admin";
+            var password = "admin";
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
         }
-      }
-    },
-    {
-      "@context": "http://www.w3.org/ns/anno.jsonld",
-      "id": 2,
-      "type": "Annotation",
-      "body": {
-        "type": "TextualBody",
-        "value": "Annotation 2 Lorem ipsum dolor sit amet....",
-        "format": "text/plain"
-      },
-      "target": {
-        "source": "http://127.0.0.1:8000/instance/6",
-        "selector": {
-          "type": "XPathSelector",
-          "value": "id('post-field-11')|Then a storm came in and saved my life"
-        }
-      }
-    },
-    {
-      "@context": "http://www.w3.org/ns/anno.jsonld",
-      "id": 3,
-      "type": "Annotation",
-      "body": {
-        "type": "TextualBody",
-        "value": "Annotation 3 - Date field Lorem ipsum dolor sit amet....",
-        "format": "text/plain"
-      },
-      "target": {
-        "source": "http://127.0.0.1:8000/instance/6",
-        "selector": {
-          "type": "XPathSelector",
-          "value": "id('post-field-8')|2020-05-05T23:59:00"
-        }
-      }
+
+function getPathTo(element) {
+    // if (element.id !== '')
+    //     return 'id("' + element.id + '")';
+    if (element === document.body)
+        return element.tagName;
+
+    var ix = 0;
+    var siblings = element.parentNode.childNodes;
+    for (var i = 0; i < siblings.length; i++) {
+        var sibling = siblings[i];
+        if (sibling === element)
+            return getPathTo(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
+        if (sibling.nodeType === 1 && sibling.tagName === element.tagName)
+            ix++;
     }
-]
-
-function getTextSelection() {
-    var selection = window.getSelection();
-    var annotatable = $(selection.anchorNode.parentNode).hasClass("annotatable");
-    if (annotatable) {
-        var highlightedText = selection.toString();
-        return (highlightedText && highlightedText !== "") ? highlightedText.trim() : undefined;
-    }
-    return undefined;
-    // var highlightedText = "";
-    // if (window.getSelection) {
-    //
-    //     console.log(sel.anchorNode.parentNode);
-    //     highlightedText = window.getSelection().toString();
-    // } else if (document.selection && document.selection.type != "Control") {
-    //     highlightedText = document.selection.createRange().text;
-    // }
-    // highlightedText = highlightedText.trim()
-    // if (highlightedText && highlightedText !== "")
-    //     return highlightedText;
-    // return undefined;
-
 }
-
-function clearAnnotatorHighlight() {
-    $("span.annotation-highlight").replaceWith(function () {
-        return $(this).text()
-    })
-}
-
 $.fn.xpathEvaluate = function (xpathExpression) {
    // NOTE: vars not declared local for debug purposes
    $this = this.first(); // Don't make me deal with multiples before coffee
@@ -99,6 +41,73 @@ $.fn.xpathEvaluate = function (xpathExpression) {
    return $result;
 }
 
+
+function resetAnnotations() {
+    clearAnnotationHighlight();
+    $(".text.saved-annotation").replaceWith(function () {return $(this).html()})
+    $(".image.saved-annotation").remove();
+    createSavedAnnotationsUi();
+}
+function clearAnnotationHighlight(){
+    $("span.annotation-highlight").replaceWith(function () {return $(this).html()});
+    $(".image-annotation-marker-candidate").remove();
+    window.dispatchEvent(new CustomEvent("annotation-candidate-updated", {detail: { type: "text", annotationCandidateTarget: ""}}))
+}
+function createSavedAnnotationsUi(){
+    window.savedAnnotations.forEach(function (ann){
+        var target = $(document).xpathEvaluate("//" + ann.target.selector.value.split("|")[0]);
+        if (ann.target.type == "TextualBody") {
+            var selection = ann.target.selector.value.split("|")[1];
+            var spn = '<span class="text saved-annotation" id="annotation-frame-' + ann.id + '">$1</span>';
+            target.html(target.html().replace(new RegExp("(" + selection.replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ")", "ig"), spn))
+        }
+        else if (ann.target.type == "Image") {
+            var x = parseFloat(ann.target.selector.value.split("|")[1].split(",")[0]);
+            var y = parseFloat(ann.target.selector.value.split("|")[1].split(",")[1]);
+            target.append(
+                $("<div>")
+                .attr("id", "annotation-marker-" + ann.id)
+                .addClass("image saved-annotation")
+                .css({"position": "absolute", top: y, left: x})
+                .click(function (event) {
+                    event.stopPropagation();
+                    $(".saved-annotation").removeClass("active");
+                    $(this).addClass("active");
+                    var annotation = window.savedAnnotations.filter(i => i.id === parseInt($(this).attr("id").split("-")[2]))[0];
+                    var annotationBody = annotation.body.value;
+                    var annotationAuthor = "Admin";
+
+                    $("#new-annotation-form").hide();
+                    $("#annotation-display").show();
+                    $("#annotated-text>span").text("Image("+ parseInt(x)  + "," + parseInt(y) + ")");
+                    $("#annotation-author").text("Author: " + annotationAuthor);
+                    $("#annotation-body-display").text(annotationBody);
+
+                    $(".ui.sidebar").sidebar("show");
+                })
+            )
+        }
+    })
+}
+
+window.addEventListener("annotation-candidate-updated", function (e) {
+    window.annotationCandidate.target = e.detail.annotationCandidateTarget;
+    window.annotationCandidate.targetType = e.detail.type;
+    $("#annotating-text span").html(window.annotationCandidate.target != "" ?
+        (window.annotationCandidate.targetType == "Image"?
+            "Image(" + parseInt(window.annotationCandidate.target.split("|")[1].split(",")[0]) + "," + parseInt(window.annotationCandidate.target.split("|")[1].split(",")[1]) + ")"
+            : window.annotationCandidate.target.split("|")[1]
+        )
+        :
+        "<i class=\"fas fa-info-circle\"></i> <i>Select a target to annotate</i>");
+    updateAnnotationModel();
+    $("#annotation-body").prop("disabled", window.annotationCandidate.target == "");
+    $("#create-annotation-button").prop("disabled", window.annotationCandidate.target == "");
+
+
+})
+
+
 // document.onclick = function (event) {
 //     if (event === undefined) event = window.event;                     // IE hack
 //     var target = 'target' in event ? event.target : event.srcElement; // another IE hack
@@ -111,22 +120,7 @@ $.fn.xpathEvaluate = function (xpathExpression) {
 //     alert('Clicked element ' + path + ' offset ' + (mxy[0] - txy[0]) + ', ' + (mxy[1] - txy[1]));
 // }
 
-function getPathTo(element) {
-    if (element.id !== '')
-        return 'id("' + element.id + '")';
-    if (element === document.body)
-        return element.tagName;
 
-    var ix = 0;
-    var siblings = element.parentNode.childNodes;
-    for (var i = 0; i < siblings.length; i++) {
-        var sibling = siblings[i];
-        if (sibling === element)
-            return getPathTo(element.parentNode) + '/' + element.tagName + '[' + (ix + 1) + ']';
-        if (sibling.nodeType === 1 && sibling.tagName === element.tagName)
-            ix++;
-    }
-}
 
 function getPageXY(element) {
     var x = 0, y = 0;
@@ -150,30 +144,41 @@ function updateAnnotationModel(){
   },
   "target": {
     "source": "${window.location.href}",
+    "type": "${window.annotationCandidate.targetType}",
     "selector": {
       "type": "XPathSelector",
       "value": "${window.annotationCandidate.target.replace(/"/g, '\'')}"
     }
   }
 }
-    `;
+`
     $("#annotation-model pre").text(window.annotationCandidate.annotationModel);
-    $("#annotating-text span").text(window.annotationCandidate.target.split("|")[1]);
+    // $("#annotating-text span").text(window.annotationCandidate.target.split("|")[1]);
 }
 
-function createSavedAnnotationsUi(){
-    $(".saved-annotation").replaceWith(function(){ return $(this).html();})
-        window.savedAnnotations.forEach(function (ann){
-        // var target = $(document).xpathEvaluate(ann.target.selector.value.split("|")[0]);
-        var target = $("#" + ann.target.selector.value.split("|")[0].split("'")[1]);
-        var selection = ann.target.selector.value.split("|")[1];
-        var spn = '<span class="saved-annotation" id="annotation-frame-' + ann.id +'">$1</span>';
-        target.html(target.html().replace(new RegExp("(" + selection.replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ")", "ig"), spn))
-    })
+function fetchSavedAnnotations(){
+    return $.ajax({
+        // url: "http://localhost:8081/getAnnotations?url=" + window.location.href
+        type: "GET",
+        dataType: 'json',
+        url: "http://127.0.0.1:9000/annotations/",
+        crossDomain: true,
+        beforeSend: annotationServerAuth
+    }).then(function(result) {
+        var data = result.map(function (annObj) {
+            var ann = JSON.parse(annObj.data);
+            ann.id = annObj.id;
+            ann.created =  annObj.created;
+            return ann;
+        });
+        window.savedAnnotations = data.filter(function(ann) {return ann.target.source == window.location.href});
+        resetAnnotations();
+    });
 }
 
 $(document).ready(function () {
-    createSavedAnnotationsUi();
+
+    fetchSavedAnnotations();
 
     $(".ui.sidebar")
         .sidebar({
@@ -196,13 +201,37 @@ $(document).ready(function () {
     })
 
     $("#create-annotation-button").click(function () {
-        debugger;
-        var candidateAnnotation = JSON.parse(window.annotationCandidate.annotationModel);
-        window.idCounter ++;
-        candidateAnnotation.id = window.idCounter;
-        window.savedAnnotations.push(candidateAnnotation);
-        clearAnnotatorHighlight();
-        createSavedAnnotationsUi();
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:9000/annotations/",
+            dataType: 'json',
+            contentType: 'application/json',
+            crossDomain: true,
+            beforeSend: annotationServerAuth,
+            data: JSON.stringify({owner: 1, data: window.annotationCandidate.annotationModel})
+        }).then(function(res) {
+            var id = res.id
+            resetAnnotations();
+            fetchSavedAnnotations().then(function () {
+                $(".saved-annotation").removeClass("active");
+                $("#annotation-frame-"+id).addClass("active");
+                var annotation = window.savedAnnotations.filter(i => i.id === id)[0];
+                var annotatedText = annotation.target.type== "Image" ?
+                    "Image(" + parseInt(annotation.target.selector.value.split("|")[1].split(",")[0]) + "," + parseInt(annotation.target.selector.value.split("|")[1].split(",")[1]) + ")"
+                    : annotation.target.selector.value.split("|")[1];
+                var annotationBody = annotation.body.value;
+                var annotationAuthor = "Admin";
+
+                $("#new-annotation-form").hide();
+                $("#annotation-display").show();
+                $("#annotated-text>span").text(annotatedText);
+                $("#annotation-author").text("Author: " + annotationAuthor);
+                $("#annotation-body-display").text(annotationBody);
+
+                $(".ui.sidebar").sidebar("show");
+            });
+
+        });
     });
 
     $('<div class="ui popup" id="annotate-text-button">')
@@ -235,18 +264,23 @@ $(document).ready(function () {
 
 
     $(document).on('click', function (event) {
-        var selection = getTextSelection();
-        clearAnnotatorHighlight()
+        clearAnnotationHighlight();
         var target= 'target' in event? event.target : event.srcElement;
-        if (selection) {
-            var spn = '<span class="annotation-highlight">$1</span>';
-            $(target).html($(target).html().replace(new RegExp("(" + selection.replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ")", "ig"), spn))
+        var selection = window.getSelection(),
+        span = document.createElement('span');
+        span.className = 'annotation-highlight';
+
+        var selectionRange = $(selection.anchorNode.parentNode).hasClass("annotatable") && selection.toString() != "" ?
+                        selection.getRangeAt(0): undefined;
+        // selectionRange.endContainer = selectionRange.startContainer
+        if (selectionRange && $(selectionRange.endContainer.parentNode).hasClass("annotatable")){
+            span.appendChild(selectionRange.extractContents());
+            selectionRange.insertNode(span);
             var path = getPathTo(target);
 
-            window.annotationCandidate.target = path + "|" + selection;
-            updateAnnotationModel();
+            window.dispatchEvent(new CustomEvent("annotation-candidate-updated", {detail: { type: "TextualBody", annotationCandidateTarget: path + "|" + selection}}))
 
-            $(document).find("span.annotation-highlight").popup({
+            $("span.annotation-highlight").popup({
                 on: "hover", hoverable: true,
                 popup: "#annotate-text-button",
                 lastResort: 'top right',
@@ -255,13 +289,9 @@ $(document).ready(function () {
                 }
             })
         }
-        else{
-            clearAnnotatorHighlight();
-            // if (!$(target).hasClass("saved-annotation"));
-            // $(".ui.sidebar").sidebar("hide");
-        }
+        else resetAnnotations();
     });
-    $(document).on("click", "span.saved-annotation", function (event) {
+    $(document).on("click", ".text.saved-annotation", function (event) {
         event.stopPropagation();
         $(".saved-annotation").removeClass("active");
         $(this).addClass("active");
@@ -285,12 +315,16 @@ $(document).ready(function () {
     $("#annotation-body").trigger("keyup")
 
     $(".annotatable-image").on("click", function(event) {
+        event.stopPropagation();
         $(".image-annotation-marker-candidate").remove();
         var bounds=this.getBoundingClientRect()
         var x = event.pageX - $(this).offset().left - 5;
         var y = event.pageY - $(this).offset().top - 5;
+        var target= 'target' in event? event.target : event.srcElement;
+        var path = getPathTo(target);
         $(this).append($("<div>").addClass("image-annotation-marker-candidate").css({"position": "absolute", top: y, left: x}))
-        $(document).find(".image-annotation-marker-candidate").popup({
+        window.dispatchEvent(new CustomEvent("annotation-candidate-updated", {detail: { type: "Image", annotationCandidateTarget: path + "|" + x +"," + y}}))
+        $(".image-annotation-marker-candidate").popup({
             on: "hover", hoverable: true,
             popup: "#annotate-image-button",
             lastResort: 'top right',
