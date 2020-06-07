@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 import requests
+import json
 
 # Create your views here.
 
@@ -19,11 +20,13 @@ def search_city(request):
             }
             geo_request = requests.get(API_ENDPOINT, params=params)
             try:
-                data = geo_request.json()['predictions'][0]['description']
+                data = geo_request.json()['predictions']
+                data = json.dumps(data)
+                data = json.loads(data)
                 print(data)
             except ValueError:
                 print("Response content is not valid JSON")
-            return render(request, template_name='city/city_search.html')
+            return render(request, 'city/city_search.html', {'city_list': data})
         else:
             return render(request, template_name='city/city_search.html')
         return render(request, template_name='city/city_search.html')
