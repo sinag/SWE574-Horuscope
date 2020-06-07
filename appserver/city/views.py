@@ -6,7 +6,7 @@ import json
 # Create your views here.
 
 def search_city(request):
-
+    data={}
     if request.POST:
         if request.POST['q']:
             API_ENDPOINT = "https://maps.googleapis.com/maps/api/place/autocomplete/json?"
@@ -30,8 +30,8 @@ def search_city(request):
         elif request.POST['selectq']:
             selectq = request.POST.get('selectq')
             print(selectq)
-            return render(request, template_name='city/city_search.html')
-        return render(request, template_name='city/city_search.html')
-    return render(request, template_name='city/city_search.html')
+            return render(request, 'city/city_search.html', {'city_list': data})
+        return render(request, 'city/city_search.html', {'city_list': data})
+    return render(request, 'city/city_search.html')
 
 

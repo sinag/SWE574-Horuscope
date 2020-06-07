@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-2">
-    <div class="card rounded shadow-lg">
-        <div>
-        </div>
-        <p style="padding: 10px"><b>HoruScope</b> is platform where people can share their experiences about the city.
-            The experiences that will be shared may include a 5 star rating to the 3rd wave coffee shop which is
-            recently opened or a parking slot violation which blocks a street entrance or maybe questions to the major
-            for continuing issues of the city.</p>
-    </div>
     <div class="card-body">
         <form id="searchform" action="{% url 'city:city_search' %}" method="POST" accept-charset="utf-8">
             {% csrf_token %}
