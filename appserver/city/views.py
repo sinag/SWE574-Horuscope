@@ -3,10 +3,10 @@ from django.shortcuts import render
 import requests
 import json
 
-# Create your views here.
 
+# Create your views here.
 def search_city(request):
-    data={}
+    data = {}
     if request.POST:
         if request.POST['q']:
             API_ENDPOINT = "https://maps.googleapis.com/maps/api/place/autocomplete/json?"
@@ -23,7 +23,7 @@ def search_city(request):
                 data = geo_request.json()['predictions']
                 data = json.dumps(data)
                 data = json.loads(data)
-                #print(data)
+                # print(data)
             except ValueError:
                 print("Response content is not valid JSON")
             return render(request, 'city/city_search.html', {'city_list': data})
@@ -33,5 +33,3 @@ def search_city(request):
             return render(request, 'city/city_search.html', {'city_list': data})
         return render(request, 'city/city_search.html', {'city_list': data})
     return render(request, 'city/city_search.html')
-
-
