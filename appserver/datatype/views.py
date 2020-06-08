@@ -141,7 +141,7 @@ class ResultView(generic.ListView):
         search_keywords = []
         search_data = self.request.session.get('search_data')
         for field in DataType.objects.get(id=self.kwargs.get('datatype_id')).fields():
-            if search_data[field.name] is not '':
+            if search_data[field.name] != '':
                 search_keywords.append(search_data[field.name])
 
         for instance in Instance.objects.filter(datatype_id=self.kwargs.get('datatype_id')):
@@ -154,21 +154,21 @@ class ResultView(generic.ListView):
                         property_id=field.id).first()
                     if textfield is not None:
                         value = textfield.value
-                        if search_keyword is not "" and str(value).lower().find(str(search_keyword).lower()) > -1:
+                        if search_keyword != "" and str(value).lower().find(str(search_keyword).lower()) > -1:
                             search_match.append(value)
                 if field.type == 1:
                     integerfield = IntegerField.objects.filter(instance_id=instance.id).filter(
                         property_id=field.id).first()
                     if integerfield is not None:
                         value = integerfield.value
-                        if search_keyword is not "" and str(value).lower().find(str(search_keyword).lower()) > -1:
+                        if search_keyword != "" and str(value).lower().find(str(search_keyword).lower()) > -1:
                             search_match.append(value)
                 if field.type == 2:
                     datetimefield = DateTimeField.objects.filter(instance_id=instance.id).filter(
                         property_id=field.id).first()
                     if datetimefield is not None:
                         value = datetimefield.value
-                        if search_keyword is not "" and str(value).lower().find(str(search_keyword).lower()) > -1:
+                        if search_keyword != "" and str(value).lower().find(str(search_keyword).lower()) > -1:
                             search_match.append(value)
             if len(search_match) == len(search_keywords):
                 search_results.append(instance.id)

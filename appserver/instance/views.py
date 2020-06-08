@@ -34,7 +34,7 @@ class CreateView(FormView):
                         value = TextField(value=form.data[field.name], property_id=field.id, instance_id=instance.id)
                         value.save()
                 if field.type == 1:
-                    if form.data[field.name] is not '':
+                    if form.data[field.name] != '':
                         value = IntegerField(value=int(form.data[field.name]), property_id=field.id,
                                              instance_id=instance.id)
                     else:
@@ -42,7 +42,7 @@ class CreateView(FormView):
                                              instance_id=instance.id)
                     value.save()
                 if field.type == 2:
-                    if form.data[field.name] is not '':
+                    if form.data[field.name] != '':
                         value = DateTimeField(value=form.data[field.name], property_id=field.id,
                                               instance_id=instance.id)
                     else:
