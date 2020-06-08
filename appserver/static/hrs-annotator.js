@@ -161,7 +161,7 @@ function fetchSavedAnnotations(){
         // url: "http://localhost:8081/getAnnotations?url=" + window.location.href
         type: "GET",
         dataType: 'json',
-        url: "http://127.0.0.1:9000/annotations/",
+        url: "http://127.0.0.1:81/annotations/",
         crossDomain: true,
         beforeSend: annotationServerAuth
     }).then(function(result) {
@@ -203,7 +203,7 @@ $(document).ready(function () {
     $("#create-annotation-button").click(function () {
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:9000/annotations/",
+            url: "http://127.0.0.1:81/annotations/",
             dataType: 'json',
             contentType: 'application/json',
             crossDomain: true,

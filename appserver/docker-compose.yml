@@ -1,24 +1,24 @@
-  version: '3'
-    
-  services:
-    db:
-      image: postgres
-      environment:
-        - POSTGRES_DB=hrs
-        - POSTGRES_USER=django
-        - POSTGRES_PASSWORD=django
-      container_name: appserver-db
-    web:
-      build: .
-      command: python manage.py runserver 0.0.0.0:80
-      container_name: appserver-web
-      volumes:
-        - .:/appserver
-      environment:
-        - USE_DOCKER=yes
-        - SERVER_ADDRESS=127.0.0.1
-      ports:
-        - "80:80"
-      depends_on:
-        - db
-      entrypoint: /appserver/docker-entrypoint.sh
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:80
+    container_name: appserver-web
+    volumes:
+      - .:/appserver
+    environment:
+      - USE_DOCKER=yes
+      - SERVER_ADDRESS=127.0.0.1
+      - WAIT_HOSTS=postgres:5432
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=hrs
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=django
+    container_name: appserver-db
