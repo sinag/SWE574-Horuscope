@@ -5,7 +5,11 @@ import json
 
 
 # Create your views here.
-def search_city(request):
+from community.models import Community
+
+
+def search_city(request, communityPk):
+    community = Community.objects.get(id=communityPk)
     data = {}
     if request.POST:
         if request.POST['q']:
@@ -26,10 +30,10 @@ def search_city(request):
                 # print(data)
             except ValueError:
                 print("Response content is not valid JSON")
-            return render(request, 'city/city_search.html', {'city_list': data})
+            return render(request, 'city/city_search.html', {'city_list': data, 'comid' : communityPk})
         elif request.POST['selectq']:
             selectq = request.POST.get('selectq')
             print(selectq)
-            return render(request, 'city/city_search.html', {'city_list': data})
-        return render(request, 'city/city_search.html', {'city_list': data})
+            return render(request, 'city/city_search.html', {'city_list': data, 'comid' : communityPk})
+        return render(request, 'city/city_search.html', {'city_list': data, 'comid' : communityPk})
     return render(request, 'city/city_search.html')

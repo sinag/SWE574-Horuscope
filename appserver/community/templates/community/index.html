@@ -11,7 +11,12 @@
                 {% for community in communities %}
                     <div class="card shadow-lg mb-3">
                         <div class="card text-center">
-                            <div class="card-header text-white bg-secondary">Created by <a class="text-white" href="{% url 'users:view' pk=community.author.id %}">{{ community.author.username }}</a> @ {{ community.created_on }}</div>
+                            <div class="card-header text-white bg-secondary">Created by <a class="text-white" href="{% url 'users:view' pk=community.author.id %}">
+                                {{ community.author.username }}</a> @ {{ community.created_on }}
+                                <div>
+                                    <a href="/city" communityPk=community.id  class="btn btn-primary">
+                                        <span class="fas fa-search"></span> Browse Community</a> </div>
+                                </div>
                             <div class="card-body">
                                 <h5 class="card-title">{{ community.name }}</h5>
                                 <p class="card-text">{{ community.description }}</p>
