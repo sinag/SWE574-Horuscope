@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-2">
-    <div class="card-body">
-        <form id="searchform" action="{% url 'city:city_search' %}" method="POST" accept-charset="utf-8">
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <p class="text-muted">
+            City Selection for Communities
+        </p>
+        <div class="card shadow-lg mb-3">
+            <div class="card text-center">
+                <div class="card-header text-white bg-secondary">
+                    <h2>Select the City of the Community: <b style="color: #81e8f6">{{ community.name }}</b> </h2>
+                    <form id="searchform" action="{% url 'city:city_search' comid %}" method="POST" accept-charset="utf-8">
             {% csrf_token %}
             <div class="container" style="margin-top:120px;">
                 <input class="form-control" type="text" placeholder="Search" id="q" name="q">
@@ -10,21 +18,18 @@
                 <select required class="form-control"  id="exampleFormControlSelect1" name="selectq">
                 {% for items in city_list %}
                     <div class="form-group">
-                        <option value="{{items.description}}" id="aq"> {{ items.description }}</option>
-
+                        <option value="{{items.description}}" id="citylist"> {{ items.description }}</option>
                     </div>
                 {% endfor %}
                 </select>
             </div>
-            <div class="form-group">
-            </div>
-            <button type="submit">Select City</button>
+            <button class="btn btn-primary" type="submit" href="{ url 'community:posts' comid}}">
+                <span class="fas fa-location-arrow"></span> Select City</a></button>
             {% endif %}
         </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
-
-
-
-{{items.title}} : {{items.label}} : {{ items.description }}

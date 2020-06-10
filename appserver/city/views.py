@@ -1,17 +1,19 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 import json
 
-
 # Create your views here.
-def search_city(request):
+from community.models import Community
+
+
+def search_city(request, pk):
+    community = Community.objects.get(id=pk)
     data = {}
     if request.POST:
         if request.POST['q']:
             API_ENDPOINT = "https://maps.googleapis.com/maps/api/place/autocomplete/json?"
             query = request.POST.get('q', False)
-            print(query)
             params = {
                 'input': query,
                 'length': len(query),
@@ -23,13 +25,16 @@ def search_city(request):
                 data = geo_request.json()['predictions']
                 data = json.dumps(data)
                 data = json.loads(data)
-                # print(data)
             except ValueError:
                 print("Response content is not valid JSON")
-            return render(request, 'city/city_search.html', {'city_list': data})
+            return render(request, 'city/city_search.html', {'city_list': data , 'comid' : pk, 'community':community})
         elif request.POST['selectq']:
             selectq = request.POST.get('selectq')
             print(selectq)
-            return render(request, 'city/city_search.html', {'city_list': data})
-        return render(request, 'city/city_search.html', {'city_list': data})
-    return render(request, 'city/city_search.html')
+            community.city = selectq;
+            community.save()
+            return redirect('community:posts', pk)
+        return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk, 'community':community})
+    return render(request, 'city/city_search.html', {'comid': pk, 'community':community})
+
+#, 'comid' : pk
