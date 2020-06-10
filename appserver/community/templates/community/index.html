@@ -13,10 +13,17 @@
                         <div class="card text-center">
                             <div class="card-header text-white bg-secondary">Created by <a class="text-white" href="{% url 'users:view' pk=community.author.id %}">
                                 {{ community.author.username }}</a> @ {{ community.created_on }}
+                                {% if community.city == "" %}
                                 <div>
-                                    <a href="/city" communityPk=community.id  class="btn btn-primary">
-                                        <span class="fas fa-search"></span> Browse Community</a> </div>
+                                    <a href="{% url 'city:city_search' community.id %}" communityPk=community.id  class="btn btn-primary">
+                                        <span class="fas fa-search"></span> Add City</a> </div>
                                 </div>
+                                {% else %}
+                                <div>
+                                    <a href="{% url 'city:city_search' community.id %}" communityPk=community.id  class="btn btn-primary">
+                                        <span class="fas fa-search"></span> baska dumen</a> </div>
+                                </div>
+                                {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title">{{ community.name }}</h5>
                                 <p class="card-text">{{ community.description }}</p>
