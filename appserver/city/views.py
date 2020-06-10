@@ -27,14 +27,14 @@ def search_city(request, pk):
                 data = json.loads(data)
             except ValueError:
                 print("Response content is not valid JSON")
-            return render(request, 'city/city_search.html', {'city_list': data , 'comid' : pk})
+            return render(request, 'city/city_search.html', {'city_list': data , 'comid' : pk, 'community':community})
         elif request.POST['selectq']:
             selectq = request.POST.get('selectq')
             print(selectq)
             community.city = selectq;
             community.save()
-            return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk})
-        return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk})
-    return render(request, 'city/city_search.html', {'comid': pk})
+            return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk, 'community':community})
+        return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk, 'community':community})
+    return render(request, 'city/city_search.html', {'comid': pk, 'community':community})
 
 #, 'comid' : pk

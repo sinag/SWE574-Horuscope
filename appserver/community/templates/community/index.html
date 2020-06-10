@@ -1,94 +1,99 @@
 {% extends 'base.html' %}
 {% load community_tags %}
 {% block content %}
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-            <p class="text-muted">
-                Communities
-            </p>
-            {% if communities %}
-                {% for community in communities %}
-                    <div class="card shadow-lg mb-3">
-                        <div class="card text-center">
-                            <div class="card-header text-white bg-secondary">Created by <a class="text-white" href="{% url 'users:view' pk=community.author.id %}">
-                                {{ community.author.username }}</a> @ {{ community.created_on }}
-                                {% if community.city == "" %}
-                                <div>
-                                    <a href="{% url 'city:city_search' community.id %}" communityPk=community.id  class="btn btn-primary">
-                                        <span class="fas fa-search"></span> Add City</a> </div>
-                                </div>
-                                {% else %}
-                                <div>
-                                    <a href="{% url 'city:city_search' community.id %}" communityPk=community.id  class="btn btn-primary">
-                                        <span class="fas fa-search"></span> baska dumen</a> </div>
-                                </div>
-                                {% endif %}
-                            <div class="card-body">
-                                <h5 class="card-title">{{ community.name }}</h5>
-                                <p class="card-text">{{ community.description }}</p>
-                                <a href="{% url 'community:posts' community.id %}"
-                                   class="btn btn-primary"><span
-                                        class="fas fa-search"></span> Browse Community</a>
-                                {% if user.is_authenticated %}
-                                    {% if community.id|subscription_count_by_user:request.user.id == 0 %}
-                                        <a href="{% url 'subscription:create' community.id %}"
-                                           class="btn btn-primary"><span
-                                                class="fas fa-user-plus"></span> Join Community</a>
-                                    {% else %}
-                                        <a href="{% url 'subscription:delete' community.id|subscription_id:request.user.id %}"
-                                           class="btn btn-primary"><span class="fas fa-user-minus"></span> Leave
-                                            Community</a>
-                                    {% endif %}
-                                    {% if community.author == request.user %}
-                                        <a href="{% url 'community:update' community.id %}"
-                                           class="btn btn-primary"><span class="fas fa-edit"></span> Update
-                                            Community</a>
-                                        <a href="{% url 'community:delete' community.id %}"
-                                           class="btn btn-primary"><span class="fas fa-trash-alt"></span> Delete
-                                            Community</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            <div class="card-footer text-muted">
-                                <div style="display: flex; justify-content: space-around">
-                                    <div>{{ community.id|subscription_count }} Members</div>
-                                    <div>{{ community.id|posttype_count }} Post Types</div>
-                                    <div>{{ community.id|post_count }} Posts</div>
-                                </div>
-                            </div>
-                        </div>
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <p class="text-muted">
+            Communities
+        </p>
+        {% if communities %}
+        {% for community in communities %}
+        <div class="card shadow-lg mb-3">
+            <div class="card text-center">
+                <div class="card-header text-white bg-secondary">Created by <a class="text-white"
+                                                                               href="{% url 'users:view' pk=community.author.id %}">
+                    {{ community.author.username }}</a> @ {{ community.created_on }}
+                    {% if community.city == "" %}
+                    {% if user.username == community.author.username %}
+                    <div>
+                        <a href="{% url 'city:city_search' community.id %}" communityPk=community.id
+                           class="btn btn-danger" style="color: #ced4da">
+                            <span class="fas fa-location-arrow" style="color: #eaef15"></span> Add City</a>
                     </div>
-                {% endfor %}
-            {% else %}
-                <div class="card shadow-lg mb-3">
-                    <div class="card text-center">
-                        <div class="card-header text-white bg-secondary">
-                            Oops, no community found!
-                        </div>
-                        {% if user.is_authenticated %}
-                            <div class="card-body">
-                                <h5 class="card-title">There is nothing here</h5>
-                                <p class="card-text">Click plus icon below to create a new community</p>
-                                <a href="{% url 'community:create' %}" class="btn btn-primary"><span
-                                        class="fas fa-plus"></span> New Community</a>
-                            </div>
-                            <div class="card-footer text-muted">
-                                Just now
-                            </div>
-                        {% else %}
-                            <div class="card-body">
-                                <h5 class="card-title">There is nothing here</h5>
-                                <p class="card-text">Please login and create a new community</p>
-                            </div>
-                            <div class="card-footer text-muted">
-                                Just now
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% endif %}
                 </div>
+                {% else %}
+                <div>
+                    <a class="text" style="color: #eaef15">{{ community.city }} </a>
+                </div>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ community.name }}</h5>
+                <p class="card-text">{{ community.description }}</p>
+                <a href="{% url 'community:posts' community.id %}"
+                   class="btn btn-primary"><span
+                        class="fas fa-search"></span> Browse Community</a>
+                {% if user.is_authenticated %}
+                {% if community.id|subscription_count_by_user:request.user.id == 0 %}
+                <a href="{% url 'subscription:create' community.id %}"
+                   class="btn btn-primary"><span
+                        class="fas fa-user-plus"></span> Join Community</a>
+                {% else %}
+                <a href="{% url 'subscription:delete' community.id|subscription_id:request.user.id %}"
+                   class="btn btn-primary"><span class="fas fa-user-minus"></span> Leave
+                    Community</a>
+                {% endif %}
+                {% if community.author == request.user %}
+                <a href="{% url 'community:update' community.id %}"
+                   class="btn btn-primary"><span class="fas fa-edit"></span> Update
+                    Community</a>
+                <a href="{% url 'community:delete' community.id %}"
+                   class="btn btn-primary"><span class="fas fa-trash-alt"></span> Delete
+                    Community</a>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="card-footer text-muted">
+                <div style="display: flex; justify-content: space-around">
+                    <div>{{ community.id|subscription_count }} Members</div>
+                    <div>{{ community.id|posttype_count }} Post Types</div>
+                    <div>{{ community.id|post_count }} Posts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="card shadow-lg mb-3">
+        <div class="card text-center">
+            <div class="card-header text-white bg-secondary">
+                Oops, no community found!
+            </div>
+            {% if user.is_authenticated %}
+            <div class="card-body">
+                <h5 class="card-title">There is nothing here</h5>
+                <p class="card-text">Click plus icon below to create a new community</p>
+                <a href="{% url 'community:create' %}" class="btn btn-primary"><span
+                        class="fas fa-plus"></span> New Community</a>
+            </div>
+            <div class="card-footer text-muted">
+                Just now
+            </div>
+            {% else %}
+            <div class="card-body">
+                <h5 class="card-title">There is nothing here</h5>
+                <p class="card-text">Please login and create a new community</p>
+            </div>
+            <div class="card-footer text-muted">
+                Just now
+            </div>
             {% endif %}
         </div>
-        <div class="col-sm-2"></div>
     </div>
+    {% endif %}
+</div>
+<div class="col-sm-2"></div>
+</div>
 {% endblock %}
