@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 import json
 
@@ -33,7 +33,7 @@ def search_city(request, pk):
             print(selectq)
             community.city = selectq;
             community.save()
-            return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk, 'community':community})
+            return redirect('community:posts', pk)
         return render(request, 'city/city_search.html', {'city_list': data, 'comid' : pk, 'community':community})
     return render(request, 'city/city_search.html', {'comid': pk, 'community':community})
 

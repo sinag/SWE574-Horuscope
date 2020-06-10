@@ -23,9 +23,8 @@
                 {% endfor %}
                 </select>
             </div>
-            <div class="form-group">
-            </div>
-            <button class="btn-danger" type="submit">Select City</button>
+            <button class="btn btn-primary" type="submit" href="{ url 'community:posts' comid}}">
+                <span class="fas fa-location-arrow"></span> Select City</a></button>
             {% endif %}
         </form>
                 </div>
@@ -33,6 +32,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}
