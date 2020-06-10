@@ -2,6 +2,9 @@ window.annotationCandidate = { target: ""};
 window.savedAnnotations = [];
 window.idCounter = 3;
 
+annotationServerPort = 81
+annotationServerRoot = "http://" + window.location.hostname + ":" + annotationServerPort
+
 
 var annotationServerAuth = function (xhr) {
             var username = "admin";
@@ -161,7 +164,7 @@ function fetchSavedAnnotations(){
         // url: "http://localhost:8081/getAnnotations?url=" + window.location.href
         type: "GET",
         dataType: 'json',
-        url: "http://127.0.0.1:81/annotations/",
+        url: annotationServerRoot + "/annotations/",
         crossDomain: true,
         beforeSend: annotationServerAuth
     }).then(function(result) {
@@ -203,7 +206,7 @@ $(document).ready(function () {
     $("#create-annotation-button").click(function () {
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:81/annotations/",
+            url: annotationServerRoot + "/annotations/",
             dataType: 'json',
             contentType: 'application/json',
             crossDomain: true,
