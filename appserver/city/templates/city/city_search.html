@@ -10,7 +10,7 @@
             <div class="card text-center">
                 <div class="card-header text-white bg-secondary">
                     <h2>Select the City of the Community: <b style="color: #81e8f6">{{ community.name }}</b> </h2>
-                    <form id="searchform" action="{% url 'city:city_search' comid %}" method="POST" accept-charset="utf-8">
+        <form id="searchform" action="{% url 'city:city_search' comid %}" method="POST" accept-charset="utf-8">
             {% csrf_token %}
             <div class="container" style="margin-top:120px;">
                 <input class="form-control" type="text" placeholder="Search" id="q" name="q">
