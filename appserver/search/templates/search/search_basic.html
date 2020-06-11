@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <p class="text-muted">
+            Search For Cities
+        </p>
+        <div class="card shadow-lg mb-3">
+            <div class="card text-center">
+                <div class="card-header text-white bg-secondary">
+                    <h2>Select the City of the Community: <b style="color: #81e8f6">zZsxdzf</b> </h2>
+                    <form id="searchform" action="" method="POST" accept-charset="utf-8">
+                        {% csrf_token %}
+                        <div class="container" style="margin-top:120px;">
+                            <input class="form-control" type="text" placeholder="Search" id="community_search" name="community_search">
+                            {% if communities %}
+                                {% for items in communities %}
+                                    <h2>{{ items.name }}</h2>
+                                    <h3>{{ items.city }}</h3>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

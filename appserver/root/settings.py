@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'activitystream.apps.ActivitystreamConfig',
     'welcome.apps.WelcomeConfig',
     'city.apps.CityConfig',
+    'search.apps.SearchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sessions',
