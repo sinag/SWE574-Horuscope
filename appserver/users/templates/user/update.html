@@ -10,7 +10,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_bio">Bio</label>
-                        <textarea type="text" class="form-control form-control-lg rounded" maxlength="500"
+                        <textarea type="text" class="form-control form-control-lg rounded" maxlength="100"
                                   name="bio"
                                   id="id_bio"
                                   required>{{ user.bio }}</textarea>
@@ -20,7 +20,7 @@
                                   name="profile_pic"
                                   id="id_profile_pic"
                                   required>{{ user.profile_pic }}</textarea>
-                        <div class="invalid-feedback">Please enter your comment.</div>
+                        <div class="invalid-feedback">You missed the Profile Pic URL</div>
                     </div>
                     {% if form.errors %}
                         {% for field in form %}
