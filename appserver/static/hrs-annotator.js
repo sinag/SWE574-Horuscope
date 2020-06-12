@@ -1,16 +1,72 @@
 window.annotationCandidate = { target: ""};
 window.savedAnnotations = [];
-window.idCounter = 3;
 
 annotationServerPort = 81
 annotationServerRoot = "http://" + window.location.hostname + ":" + annotationServerPort
 
-
-var annotationServerAuth = function (xhr) {
-            var username = "admin";
-            var password = "admin";
-            xhr.setRequestHeader ("Authorization", "Basic " + btoa(username + ":" + password));
+// get from session (if the value expired it is destroyed)
+function sessionGet(key) {
+  let stringValue = window.localStorage.getItem(key)
+    if (stringValue !== null) {
+      let value = JSON.parse(stringValue)
+        let expirationDate = new Date(value.expirationDate)
+        if (expirationDate > new Date()) {
+          return value.value
+        } else {
+          window.localStorage.removeItem(key)
         }
+    }
+    return null
+}
+
+function sessionClear(key) {
+    window.localStorage.removeItem(key)
+}
+
+// add into session
+function sessionSet(key, value, expirationInMin = 10) {
+  let expirationDate = new Date(new Date().getTime() + (60000 * expirationInMin))
+    let newValue = {
+    value: value,
+    expirationDate: expirationDate.toISOString()
+  }
+  window.localStorage.setItem(key, JSON.stringify(newValue))
+}
+
+function checkAuth() {
+    var auth = sessionGet("auth")
+    if(auth){
+        var nameDisplayed =
+            ((auth.first_name && auth.first_name != "") ||
+            (auth.last_name && auth.first_name != "")) ?
+            auth.first_name + " " + auth.last_name :
+            auth.username;
+        $("#new-annotation-form-authenticated").show()
+        $("#ann-account-menu span").text(nameDisplayed)
+        $("#ann-account-menu-logout").show()
+        $("#ann-account-menu-login").hide()
+
+        $("#annotation-auth").hide()
+
+    }
+    else{
+        $("#new-annotation-form-authenticated").hide()
+        $("#ann-account-menu span").text("")
+
+        $("#ann-account-menu-logout").hide()
+        $("#ann-account-menu-login").show()
+        $("#annotation-auth").show()
+    }
+}
+
+var setAnnotationServerAuth = function (username=null, password=null) {
+    var auth = sessionGet("auth")
+    var u = username ? username : auth ? auth.username : "";
+    var p = password ? password : auth ? auth.password: "";
+    return function (xhr) {
+        xhr.setRequestHeader ("Authorization", "Basic " + btoa(u + ":" + p));
+    }
+}
 
 function getPathTo(element) {
     // if (element.id !== '')
@@ -30,6 +86,7 @@ function getPathTo(element) {
 }
 $.fn.xpathEvaluate = function (xpathExpression) {
    // NOTE: vars not declared local for debug purposes
+    if  (xpathExpression === "//") return null;
    $this = this.first(); // Don't make me deal with multiples before coffee
 
    // Evaluate xpath and retrieve matching nodes
@@ -44,7 +101,10 @@ $.fn.xpathEvaluate = function (xpathExpression) {
    return $result;
 }
 
-
+function resetInputFields(){
+    $(".ui.sidebar input").val("");
+    $(".ui.sidebar textarea").text("");
+}
 function resetAnnotations() {
     clearAnnotationHighlight();
     $(".text.saved-annotation").replaceWith(function () {return $(this).html()})
@@ -94,6 +154,7 @@ function createSavedAnnotationsUi(){
 }
 
 window.addEventListener("annotation-candidate-updated", function (e) {
+    checkAuth();
     window.annotationCandidate.target = e.detail.annotationCandidateTarget;
     window.annotationCandidate.targetType = e.detail.type;
     $("#annotating-text span").html(window.annotationCandidate.target != "" ?
@@ -136,7 +197,9 @@ function getPageXY(element) {
 }
 
 function updateAnnotationModel(){
-    window.annotationCandidate.annotationModel = `
+    var auth = sessionGet("auth")
+    if(auth) {
+        window.annotationCandidate.annotationModel = `
 {
   "@context": "http://www.w3.org/ns/anno.jsonld",
   "type": "Annotation",
@@ -152,11 +215,19 @@ function updateAnnotationModel(){
       "type": "XPathSelector",
       "value": "${window.annotationCandidate.target.replace(/"/g, '\'')}"
     }
+  },
+  "created": "${(new Date()).toISOString()}",
+  "creator": {
+    "id": "${auth.url}",
+    "type": "Person",
+    "name": "${auth.first_name} ${auth.last_name}",
+    "nickname": "${auth.username}"
+    }
   }
-}
 `
-    $("#annotation-model pre").text(window.annotationCandidate.annotationModel);
-    // $("#annotating-text span").text(window.annotationCandidate.target.split("|")[1]);
+        $("#annotation-model pre").text(window.annotationCandidate.annotationModel);
+        // $("#annotating-text span").text(window.annotationCandidate.target.split("|")[1]);
+    }
 }
 
 function fetchSavedAnnotations(){
@@ -166,7 +237,7 @@ function fetchSavedAnnotations(){
         dataType: 'json',
         url: annotationServerRoot + "/annotations/",
         crossDomain: true,
-        beforeSend: annotationServerAuth
+        beforeSend: setAnnotationServerAuth("admin", "admin")
     }).then(function(result) {
         var data = result.map(function (annObj) {
             var ann = JSON.parse(annObj.data);
@@ -180,6 +251,7 @@ function fetchSavedAnnotations(){
 }
 
 $(document).ready(function () {
+    checkAuth();
 
     fetchSavedAnnotations();
 
@@ -210,7 +282,7 @@ $(document).ready(function () {
             dataType: 'json',
             contentType: 'application/json',
             crossDomain: true,
-            beforeSend: annotationServerAuth,
+            beforeSend: setAnnotationServerAuth(),
             data: JSON.stringify({owner: 1, data: window.annotationCandidate.annotationModel})
         }).then(function(res) {
             var id = res.id
@@ -240,6 +312,7 @@ $(document).ready(function () {
     $('<div class="ui popup" id="annotate-text-button">')
         .append('<button type="button" class="btn btn-outline-primary btn-lg"><i class="fa fa-comment"></i></button>')
         .on("click", function (event) {
+            checkAuth();
             $(".saved-annotation").removeClass("active");
             event.stopPropagation();
             $("span.annotation-highlight").popup("hide");
@@ -254,6 +327,7 @@ $(document).ready(function () {
     $('<div class="ui popup" id="annotate-image-button">')
         .append('<button type="button" class="btn btn-outline-primary btn-lg"><i class="fa fa-comment"></i></button>')
         .on("click", function (event) {
+            checkAuth();
             $(".saved-annotation").removeClass("active");
             event.stopPropagation();
             $("span.annotation-highlight").popup("hide");
@@ -336,4 +410,147 @@ $(document).ready(function () {
             }
         })
     });
+
+    $(".ui.accordion").accordion();
+    $('.dropdown-toggle').dropdown()
+
+    $("#ann-login-username, #ann-login-password").keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#ann-login-button").click();
+        }
+    });
+    $("#ann-register-username, #ann-register-password, #ann-register-password-2, #ann-register-email, #ann-register-first-name, #ann-register-last-name")
+        .keypress(function(event) {
+        if (event.keyCode === 13) {
+            $("#ann-register-button").click();
+        }
+    });
+    $("#ann-login-button").click(function () {
+        if (validateLoginForm()){
+            var username= $("#ann-login-username").val();
+            var password= $("#ann-login-password").val();
+            $.ajax({
+                // url: "http://localhost:8081/getAnnotations?url=" + window.location.href
+                type: "GET",
+                dataType: 'json',
+                url: annotationServerRoot + "/annotations/",
+                crossDomain: true,
+                beforeSend: setAnnotationServerAuth(username, password),
+                success: function(xhr, textStatus) {
+                        $.ajax({
+                            type: "GET",
+                            dataType: 'json',
+                            url: annotationServerRoot + "/users/",
+                            crossDomain: true,
+                        }).then(function(result){
+                            var user = result.filter(i => i.username === username)[0];
+                            user.password = password;
+                            sessionSet("auth", user, 30)
+                            checkAuth();
+                            resetInputFields();
+                        })
+                },
+                error: function (jqXHR, textStatus, errorThrown ){
+                    console.log(jqXHR, textStatus, errorThrown)
+                    if (errorThrown === "Forbidden")
+                        alert("Login failed: Invalid username or password")
+                    else
+                        alert("Login failed: " + jqXHR.responseText)
+                }
+            })
+        }
+    })
+    $("#ann-account-menu-logout").click(function () {
+        $("#auth-dropdown").dropdown('toggle')
+        $("#new-annotation-form").show();
+        $("#annotation-display").hide();
+        $("#annotation-auth").accordion("open", 0);
+        $("#annotation-auth").accordion("close others");
+
+        sessionClear("auth");
+        checkAuth();
+    })
+    $("#ann-account-menu-login").click(function () {
+        $("#auth-dropdown").dropdown('toggle')
+        $("#new-annotation-form").show();
+        $("#annotation-display").hide();
+        $("#annotation-auth").accordion("open", 0);
+        $("#annotation-auth").accordion("close others");
+        sessionClear("auth");
+        checkAuth();
+    })
+    $("#ann-register-button").click(function () {
+        if (validateRegisterForm()){
+            var user =     {
+                username: $("#ann-register-username").val(),
+                first_name: $("#ann-register-first-name").val(),
+                last_name: $("#ann-register-last-name").val(),
+                email: $("#ann-register-email").val(),
+                password: $("#ann-register-password").val()
+            }
+            $.ajax({
+                // url: "http://localhost:8081/getAnnotations?url=" + window.location.href
+                type: "POST",
+                dataType: 'json',
+                url: annotationServerRoot + "/users/",
+                dataType: 'json',
+                contentType: 'application/json',
+                crossDomain: true,
+                data: JSON.stringify(user),
+                success: function(xhr, textStatus) {
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json',
+                        url: annotationServerRoot + "/users/",
+                        crossDomain: true,
+                    }).then(function(result){
+                        var savedUser = result.filter(i => i.username === user.username)[0];
+                        savedUser.password = user.password;
+                        sessionSet("auth", savedUser, 30)
+                        checkAuth();
+                        resetInputFields();
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown ){
+                    console.log(jqXHR, textStatus, errorThrown)
+                    alert(jqXHR.responseText)
+                }
+            }).then(function (result) {
+                console.log(result);
+            })
+        }
+    })
 });
+
+function validateRegisterForm(){
+    if ($("#ann-register-username").val() === ""){
+        alert("Username is required");
+        return false
+    }
+    if ($("#ann-register-password").val() === ""){
+        alert("Password is required");
+        return false
+    }
+    if ($("#ann-register-password2").val() === ""){
+        alert("Please confirm your password");
+        return false
+    }
+    if ($("#ann-register-password").val() !== $("#ann-register-password-2").val()){
+        alert("Passwords do not match");
+        return false
+    }
+    return true;
+}
+
+function validateLoginForm(){
+    if ($("#ann-login-username").val() === ""){
+        alert("Please enter your username");
+        return false
+    }
+    if ($("#ann-login-password").val() === ""){
+        alert("Please enter your password");
+        return false
+    }
+
+    return true;
+}

@@ -87,3 +87,7 @@ span.annotation-highlight{
  .post-field-display-row:not(:last-child){
     border-bottom: 1px solid #DDD;
  }
+ #annotation-auth .title{
+    background: #6c757d;
+    color: #FFFFFF;
+ }
