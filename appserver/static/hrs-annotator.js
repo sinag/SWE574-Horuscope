@@ -138,12 +138,14 @@ function createSavedAnnotationsUi(){
                     $(this).addClass("active");
                     var annotation = window.savedAnnotations.filter(i => i.id === parseInt($(this).attr("id").split("-")[2]))[0];
                     var annotationBody = annotation.body.value;
-                    var annotationAuthor = "Admin";
+                    var annotationAuthor = annotation.creator.name;
+                    var annotationCreatedOn = moment(Date.parse(annotation.created)).format("DD.MM.YYYY HH:mm")
 
                     $("#new-annotation-form").hide();
                     $("#annotation-display").show();
                     $("#annotated-text>span").text("Image("+ parseInt(x)  + "," + parseInt(y) + ")");
-                    $("#annotation-author").text("Author: " + annotationAuthor);
+                    $("#annotation-author").text(annotationAuthor);
+                    $("#annotation-datetime").text(annotationCreatedOn);
                     $("#annotation-body-display").text(annotationBody);
 
                     $(".ui.sidebar").sidebar("show");
@@ -295,13 +297,16 @@ $(document).ready(function () {
                     "Image(" + parseInt(annotation.target.selector.value.split("|")[1].split(",")[0]) + "," + parseInt(annotation.target.selector.value.split("|")[1].split(",")[1]) + ")"
                     : annotation.target.selector.value.split("|")[1];
                 var annotationBody = annotation.body.value;
-                var annotationAuthor = "Admin";
+                var annotationAuthor = annotation.creator.name;
+                var annotationCreatedOn = moment(Date.parse(annotation.created)).format("DD.MM.YYYY HH:mm")
 
                 $("#new-annotation-form").hide();
                 $("#annotation-display").show();
                 $("#annotated-text>span").text(annotatedText);
-                $("#annotation-author").text("Author: " + annotationAuthor);
+                $("#annotation-author").text(annotationAuthor);
+                $("#annotation-datetime").text(annotationCreatedOn);
                 $("#annotation-body-display").text(annotationBody);
+
 
                 $(".ui.sidebar").sidebar("show");
             });
@@ -375,12 +380,14 @@ $(document).ready(function () {
         var annotation = window.savedAnnotations.filter(i => i.id === parseInt($(this).attr("id").split("-")[2]))[0];
         var annotatedText = annotation.target.selector.value.split("|")[1];
         var annotationBody = annotation.body.value;
-        var annotationAuthor = "Admin";
+        var annotationAuthor = annotation.creator.name;
+        var annotationCreatedOn = moment(Date.parse(annotation.created)).format("DD.MM.YYYY HH:mm")
 
         $("#new-annotation-form").hide();
         $("#annotation-display").show();
         $("#annotated-text>span").text(annotatedText);
-        $("#annotation-author").text("Author: " + annotationAuthor);
+        $("#annotation-author").text(annotationAuthor);
+        $("#annotation-datetime").text(annotationCreatedOn);
         $("#annotation-body-display").text(annotationBody);
 
         $(".ui.sidebar").sidebar("show");

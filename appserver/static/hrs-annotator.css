@@ -47,16 +47,16 @@ span.annotation-highlight{
     font-weight: normal;
 }
 .image-annotation-marker-candidate{
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 120%, #e9f6a4, #eaef15 10%, #b6a313 80%, #b6a313 100%);
     border: 1px solid #FFF;
     cursor: pointer;
 }
 .image.saved-annotation{
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 120%, #81e8f6, #76deef 10%, #057ad7 80%, #0772b6 100%);
     border: 1px solid #FFF;
@@ -76,7 +76,7 @@ span.annotation-highlight{
 }
 
 .image.saved-annotation.active {
-    background: #d0f0fb;
+    background: #4a8cef;
     border-width: 2px;
 }
 
@@ -91,3 +91,8 @@ span.annotation-highlight{
     background: #6c757d;
     color: #FFFFFF;
  }
+
+ #annotated-text, #annotating-text {
+    padding: .75em;
+    background: #F3F3F3;
+}
