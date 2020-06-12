@@ -28,7 +28,14 @@ For kanban style work item tracking, please check the [project page](https://git
 [< Demo link placeholder >](https://github.com/sinag/SWE574)
 
 ## Technologies
-* [< Technology placeholder >](https://github.com/sinag/SWE574)
-* [< Technology placeholder >](https://github.com/sinag/SWE574)
-* [< Technology placeholder >](https://github.com/sinag/SWE574)
-* [< Technology placeholder >](https://github.com/sinag/SWE574)
+### Development
+* [Django Framework](https://www.djangoproject.com/) : While handling many web development tasks in the background, this high level Python Web framework offers rapid development.
+* [PostgreSQL](https://www.postgresql.org/) : An open source SQL database system.
+* For more details on installed Python packages and such, please visit the [ Wiki Link ](https://github.com/sinag/SWE574)
+### Deployment
+* [Docker](https://www.docker.com/get-started) : Purpose of the docker containers is to automate the deployment process and to provide modules that can work independently.
+* [AWS - Amazon Elastic Container Service](https://aws.amazon.com/tr/getting-started/hands-on/deploy-docker-containers/)
+* A detailed deployment guide for both local and AWS is available here: [ Wiki Link ](https://github.com/sinag/SWE574)
+### Project Management
+* [Microsoft Teams](https://www.djangoproject.com/) : A Team Collaboration tool provided by the Microsoft, an alternative to Slack.
+* Google Docs for time tracking & Google Meet (Previously Hangouts) is utilized for weekly meetings
