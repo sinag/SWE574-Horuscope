@@ -6,11 +6,85 @@
   <div class="ui right very wide sidebar" style="padding: 1em;">
 
     <h2 style="border-bottom: 1px solid #CCC; margin-bottom: 1em;">Annotations<button id="close-sidebar" style="cursor: pointer;" class="btn btn-outline-secondary float-right"><i class="fa fa-times"></i></button></h2>
+      <div style="height: 3em;">
+          <div class="dropdown" id="ann-account-menu">
+              <button class="btn btn-secondary dropdown-toggle float-right" id="auth-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-user"></i> <span></span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" id="ann-account-menu-logout" style="display: none">Logout</a>
+                <a class="dropdown-item" href="#" id="ann-account-menu-login">Login</a>
+              </div>
+          </div>
+      </div>
     <div id="new-annotation-form" style="display: none;">
-        <h5 id="annotating-text">Target: <span class="badge badge-secondary"></span></h5>
-        <textarea id="annotation-body" style="width: 100%; margin: 1em 0; padding: 0.5em;" placeholder="Write your annotation..." rows="6"></textarea>
-        <button type="button" class="btn btn-primary float-right" id="create-annotation-button"><i class="fa fa-save"></i> Save Annotation</button>
-        <details id="annotation-model"><pre></pre></details>
+        <div id="new-annotation-form-authenticated" style="display: none;">
+            <h5 id="annotating-text">Target: <span class="badge badge-secondary"></span></h5>
+            <textarea id="annotation-body" style="width: 100%; margin: 1em 0; padding: 0.5em;" placeholder="Write your annotation..." rows="6"></textarea>
+            <button type="button" class="btn btn-primary float-right" id="create-annotation-button"><i class="fa fa-save"></i> Save Annotation</button>
+            <details id="annotation-model"><pre></pre></details>
+        </div>
+        <div id="annotation-auth" class="ui styled accordion" >
+          <div class="active title">
+            <i class="dropdown icon"></i>
+            You must log in to create annotations
+          </div>
+          <div class="active content" style="padding: 2em 0.5em">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username" id="ann-login-username">
+
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                </div>
+                <input type="password" class="form-control" placeholder="Password" id="ann-login-password">
+            </div>
+            <div class="form-group" style="height: 1em">
+                <button class="btn float-right btn-primary" id="ann-login-button">Login</button>
+            </div>
+          </div>
+          <div class="title">
+            <i class="dropdown icon"></i>
+            Don't have an account? Register
+          </div>
+          <div class="content" style="padding: 2em 0.5em">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username" id="ann-register-username">
+
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                </div>
+                <input type="password" class="form-control" placeholder="Password" id="ann-register-password">
+            </div>
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                </div>
+                <input type="password" class="form-control" placeholder="Confirm Password" id="ann-register-password-2">
+            </div>
+            <div class="input-group form-group">
+                <input type="text" class="form-control" placeholder="Email" id="ann-register-email">
+            </div>
+            <div class="input-group form-group">
+                <input type="text" class="form-control" placeholder="First Name" id="ann-register-first-name">
+            </div>
+            <div class="input-group form-group">
+                <input type="text" class="form-control" placeholder="Last Name" id="ann-register-last-name">
+            </div>
+            <div class="form-group" style="height: 1em">
+                <button class="btn float-right btn-primary" id="ann-register-button">Register</button>
+            </div>
+          </div>
+        </div>
     </div>
     <div id="annotation-display" style="display: none;">
         <h5 id="annotated-text">Target: <span class="badge badge-secondary"></span></h5>
@@ -144,11 +218,13 @@
     </div>
     </div>
     <link rel="stylesheet" href="{% static '../static/hrs-annotator.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/accordion.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/sidebar.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/popup.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/transition.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/transition.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/sidebar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/popup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/accordion.min.js"></script>
     <script type="text/javascript" src="{% static '../static/hrs-annotator.js' %}"></script>
 {% endblock %}
