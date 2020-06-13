@@ -47,6 +47,7 @@ function checkAuth() {
         $("#ann-account-menu-login").hide()
 
         $("#annotation-auth").hide()
+        $("#ann-filter-my").removeClass("disabled")
 
     }
     else{
@@ -56,6 +57,7 @@ function checkAuth() {
         $("#ann-account-menu-logout").hide()
         $("#ann-account-menu-login").show()
         $("#annotation-auth").show()
+        $("#ann-filter-my").addClass("disabled")
     }
 }
 
@@ -117,7 +119,7 @@ function clearAnnotationHighlight(){
     window.dispatchEvent(new CustomEvent("annotation-candidate-updated", {detail: { type: "text", annotationCandidateTarget: ""}}))
 }
 function createSavedAnnotationsUi(){
-    window.savedAnnotations.forEach(function (ann){
+    window.savedAnnotationsFiltered.forEach(function (ann){
         var target = $(document).xpathEvaluate("//" + ann.target.selector.value.split("|")[0]);
         if (ann.target.type == "TextualBody") {
             var selection = ann.target.selector.value.split("|")[1];
@@ -248,6 +250,7 @@ function fetchSavedAnnotations(){
             return ann;
         });
         window.savedAnnotations = data.filter(function(ann) {return ann.target.source == window.location.href});
+        window.savedAnnotationsFiltered = data.filter(function(ann) {return ann.target.source == window.location.href});
         resetAnnotations();
     });
 }
@@ -454,6 +457,8 @@ $(document).ready(function () {
                             user.password = password;
                             sessionSet("auth", user, 30)
                             checkAuth();
+                            $("#ann-filter-all").click();
+                            $("#ann-filter-dropdown").dropdown('toggle')
                             resetInputFields();
                         })
                 },
@@ -473,9 +478,10 @@ $(document).ready(function () {
         $("#annotation-display").hide();
         $("#annotation-auth").accordion("open", 0);
         $("#annotation-auth").accordion("close others");
-
         sessionClear("auth");
         checkAuth();
+        $("#ann-filter-all").click();
+        $("#ann-filter-dropdown").dropdown('toggle')
     })
     $("#ann-account-menu-login").click(function () {
         $("#auth-dropdown").dropdown('toggle')
@@ -527,6 +533,35 @@ $(document).ready(function () {
             })
         }
     })
+
+    $("#ann-filter-menu .dropdown-item").click(function () {
+        $("#ann-filter-menu .dropdown-item").removeClass("active")
+        $(this).addClass("active")
+        $("#ann-filter-dropdown").dropdown('toggle')
+    })
+    $("#ann-filter-today").click(function () {
+        window.savedAnnotationsFiltered = window.savedAnnotations.filter(i => moment(Date.parse(i.created)) > moment().startOf('day'))
+        resetAnnotations()
+    })
+    $("#ann-filter-week").click(function () {
+        window.savedAnnotationsFiltered = window.savedAnnotations.filter(i => moment(Date.parse(i.created)) > moment().startOf('isoWeek'))
+        resetAnnotations()
+    })
+    $("#ann-filter-month").click(function () {
+        window.savedAnnotationsFiltered = window.savedAnnotations.filter(i => moment(Date.parse(i.created)) > moment().startOf('month'))
+        resetAnnotations()
+    })
+
+    $("#ann-filter-all").click(function () {
+        window.savedAnnotationsFiltered = window.savedAnnotations
+        resetAnnotations()
+    })
+
+    $("#ann-filter-my").click(function () {
+        var auth = sessionGet("auth")
+        window.savedAnnotationsFiltered = window.savedAnnotations.filter(i => i.creator && i.creator.nickname === auth.username)
+        resetAnnotations()
+    })
 });
 
 function validateRegisterForm(){
@@ -561,3 +596,5 @@ function validateLoginForm(){
 
     return true;
 }
+
+
