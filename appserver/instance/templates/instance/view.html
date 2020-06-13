@@ -6,9 +6,23 @@
   <div class="ui right very wide sidebar" style="padding: 1em;">
 
     <h2 style="border-bottom: 1px solid #CCC; margin-bottom: 1em;">Annotations<button id="close-sidebar" style="cursor: pointer;" class="btn btn-outline-secondary float-right"><i class="fa fa-times"></i></button></h2>
-      <div style="height: 3em;">
+      <div style="height: 3em; text-align: right">
+          <div class="dropdown" id="ann-filter-menu">
+              <button class="btn btn-secondary dropdown-toggle" id="ann-filter-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-filter"></i> <span></span>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item active" href="#" id="ann-filter-all">All</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item disabled" href="#" id="ann-filter-my">My annotations</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="ann-filter-today">Today</a>
+                <a class="dropdown-item" href="#" id="ann-filter-week">This Week</a>
+                <a class="dropdown-item" href="#" id="ann-filter-month">This Month</a>
+              </div>
+          </div>
           <div class="dropdown" id="ann-account-menu">
-              <button class="btn btn-secondary dropdown-toggle float-right" id="auth-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-secondary dropdown-toggle" id="auth-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fa fa-user"></i> <span></span>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
