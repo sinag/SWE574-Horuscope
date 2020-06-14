@@ -7,25 +7,59 @@ django.setup()
 
 
 from django.contrib.auth import get_user_model
-from users.models import CustomUser
+from activitystream.models import ActivityStream
+from comment.models import Comment
 from community.models import Community
 from datatype.models import DataType
-from property.models import Property
+from datetimefield.models import DateTimeField
+from flag.models import Flag
 from instance.models import Instance
-from textfield.models import TextField
+from integerfield.models import IntegerField
+from property.models import Property
 from subscription.models import Subscription
-from comment.models import Comment
+from textfield.models import TextField
+from users.models import CustomUser
+
+
+textfields = TextField.objects.all()
+integerfields = IntegerField.objects.all()
+datetimefields = DateTimeField.objects.all()
+properties = Property.objects.all()
+subcriptions = Subscription.objects.all()
+comments = Comment.objects.all()
+instances = Instance.objects.all()
+datatypes = DataType.objects.all()
+flags = Flag.objects.all()
+communities = Community.objects.all()
+activitystreams = ActivityStream.objects.all()
+users = CustomUser.objects.all()
+
+for subcription in subcriptions:
+    subcription.delete()
+for flag in flags:
+    flag.delete()
+for comment in comments:
+    comment.delete()
+for textfield in textfields:
+    textfield.delete()
+for integerfield in integerfields:
+    integerfield.delete()
+for datetimefield in datetimefields:
+    datetimefield.delete()
+for property in properties:
+    property.delete()
+for instance in instances:
+    instance.delete()
+for datatype in datatypes:
+    datatype.delete()
+for community in communities:
+    community.delete()
+for activitystream in activitystreams:
+    activitystream.delete()
+for user in users:
+    user.delete()
 
 User = get_user_model()
-
-# Comment.objects.all().delete()
-# TextField.objects.all().delete()
-# Instance.objects.all().delete()
-# Property.objects.all().delete()
-# DataType.objects.all().delete()
-# Subscription.objects.all().delete()
-# Community.objects.all().delete()
-# CustomUser.objects.all().delete()
 
 if not User.objects.filter(username='admin').exists():
     User.objects.create_superuser('admin', 'admin@example.com', 'admin')

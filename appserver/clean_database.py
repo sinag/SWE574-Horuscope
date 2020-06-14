@@ -10,6 +10,7 @@ from integerfield.models import IntegerField
 from property.models import Property
 from subscription.models import Subscription
 from textfield.models import TextField
+from users.models import CustomUser
 
 textfields = TextField.objects.all()
 integerfields = IntegerField.objects.all()
@@ -22,6 +23,7 @@ datatypes = DataType.objects.all()
 flags = Flag.objects.all()
 communities = Community.objects.all()
 activitystreams = ActivityStream.objects.all()
+users = CustomUser.objects.all()
 
 for subcription in subcriptions:
     subcription.delete()
@@ -45,5 +47,7 @@ for community in communities:
     community.delete()
 for activitystream in activitystreams:
     activitystream.delete()
+for user in users:
+    user.delete()
 
 
