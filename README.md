@@ -15,17 +15,13 @@ To view all tasks/bugs, please refer to the [Issues page](https://github.com/sin
 For kanban style work item tracking, please check the [project page](https://github.com/sinag/SWE574/projects/2)
 
 [Team Info & Manifesto](https://github.com/sinag/SWE574/wiki/Team-&-Manifesto)
-## Installation
+## Deployment
 
-< Installation info placeholder >
-
-## Build
-
-< Build info placeholder >
+[Deployment Guide](https://github.com/sinag/SWE574-Horuscope/wiki/Deployment-Guide)
 
 ## Demo
 
-[< Demo link placeholder >](https://github.com/sinag/SWE574)
+[AWS Deployment](http://100.27.5.146/)
 
 ## Technologies
 ### Development
