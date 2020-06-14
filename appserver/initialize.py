@@ -22,46 +22,46 @@ from users.models import CustomUser
 from follow.models import Follow
 
 
-textfields = TextField.objects.all()
-integerfields = IntegerField.objects.all()
-datetimefields = DateTimeField.objects.all()
-properties = Property.objects.all()
-subcriptions = Subscription.objects.all()
-comments = Comment.objects.all()
-instances = Instance.objects.all()
-datatypes = DataType.objects.all()
-flags = Flag.objects.all()
-communities = Community.objects.all()
-activitystreams = ActivityStream.objects.all()
-follows = Follow.objects.all()
-users = CustomUser.objects.all()
-
-for subcription in subcriptions:
-    subcription.delete()
-for flag in flags:
-    flag.delete()
-for comment in comments:
-    comment.delete()
-for textfield in textfields:
-    textfield.delete()
-for integerfield in integerfields:
-    integerfield.delete()
-for datetimefield in datetimefields:
-    datetimefield.delete()
-for property in properties:
-    property.delete()
-for instance in instances:
-    instance.delete()
-for datatype in datatypes:
-    datatype.delete()
-for community in communities:
-    community.delete()
-for activitystream in activitystreams:
-    activitystream.delete()
-for follow in follows:
-    follow.delete()
-for user in users:
-    user.delete()
+# textfields = TextField.objects.all()
+# integerfields = IntegerField.objects.all()
+# datetimefields = DateTimeField.objects.all()
+# properties = Property.objects.all()
+# subcriptions = Subscription.objects.all()
+# comments = Comment.objects.all()
+# instances = Instance.objects.all()
+# datatypes = DataType.objects.all()
+# flags = Flag.objects.all()
+# communities = Community.objects.all()
+# activitystreams = ActivityStream.objects.all()
+# follows = Follow.objects.all()
+# users = CustomUser.objects.all()
+#
+# for subcription in subcriptions:
+#     subcription.delete()
+# for flag in flags:
+#     flag.delete()
+# for comment in comments:
+#     comment.delete()
+# for textfield in textfields:
+#     textfield.delete()
+# for integerfield in integerfields:
+#     integerfield.delete()
+# for datetimefield in datetimefields:
+#     datetimefield.delete()
+# for property in properties:
+#     property.delete()
+# for instance in instances:
+#     instance.delete()
+# for datatype in datatypes:
+#     datatype.delete()
+# for community in communities:
+#     community.delete()
+# for activitystream in activitystreams:
+#     activitystream.delete()
+# for follow in follows:
+#     follow.delete()
+# for user in users:
+#     user.delete()
 
 
 User = get_user_model()
