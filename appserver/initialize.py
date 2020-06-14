@@ -18,14 +18,14 @@ from comment.models import Comment
 
 User = get_user_model()
 
-Comment.objects.all().delete()
-TextField.objects.all().delete()
-Instance.objects.all().delete()
-Property.objects.all().delete()
-DataType.objects.all().delete()
-Subscription.objects.all().delete()
-Community.objects.all().delete()
-CustomUser.objects.all().delete()
+# Comment.objects.all().delete()
+# TextField.objects.all().delete()
+# Instance.objects.all().delete()
+# Property.objects.all().delete()
+# DataType.objects.all().delete()
+# Subscription.objects.all().delete()
+# Community.objects.all().delete()
+# CustomUser.objects.all().delete()
 
 if not User.objects.filter(username='admin').exists():
     User.objects.create_superuser('admin', 'admin@example.com', 'admin')
