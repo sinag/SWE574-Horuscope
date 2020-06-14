@@ -249,8 +249,8 @@ function fetchSavedAnnotations(){
             ann.created =  annObj.created;
             return ann;
         });
-        window.savedAnnotations = data.filter(function(ann) {return ann.target.source == window.location.href});
-        window.savedAnnotationsFiltered = data.filter(function(ann) {return ann.target.source == window.location.href});
+        window.savedAnnotations = data.filter(function(ann) {return ann.target.source == window.location.href.replace(/#/g, "")});
+        window.savedAnnotationsFiltered = data.filter(function(ann) {return ann.target.source == window.location.href.replace(/#/g, "")});
         resetAnnotations();
     });
 }
