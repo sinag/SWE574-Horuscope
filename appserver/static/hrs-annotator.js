@@ -213,7 +213,7 @@ function updateAnnotationModel(){
     "format": "text/plain"
   },
   "target": {
-    "source": "${window.location.href}",
+    "source": "${window.location.href.replace(/#/g, "")}",
     "type": "${window.annotationCandidate.targetType}",
     "selector": {
       "type": "XPathSelector",
