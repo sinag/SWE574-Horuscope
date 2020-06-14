@@ -19,6 +19,7 @@ from property.models import Property
 from subscription.models import Subscription
 from textfield.models import TextField
 from users.models import CustomUser
+from follow.models import Follow
 
 
 textfields = TextField.objects.all()
@@ -32,6 +33,7 @@ datatypes = DataType.objects.all()
 flags = Flag.objects.all()
 communities = Community.objects.all()
 activitystreams = ActivityStream.objects.all()
+follows = Follow.objects.all()
 users = CustomUser.objects.all()
 
 for subcription in subcriptions:
@@ -56,8 +58,11 @@ for community in communities:
     community.delete()
 for activitystream in activitystreams:
     activitystream.delete()
+for follow in follows:
+    follow.delete()
 for user in users:
     user.delete()
+
 
 User = get_user_model()
 
