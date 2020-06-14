@@ -29,5 +29,5 @@ class SimpleTest(unittest.TestCase):
         pk = self.community.pk
         response1 = self.client.get('/city/'+ str(pk) + '/')
         self.assertEqual(response1.status_code, 200)
-        response2 = self.client.post('/city/1/', {'q': "Ankara"})
+        response2 = self.client.post('/city/'+ str(pk) + '/', {'q': "Ankara"})
         self.assertEqual(response2.status_code, 200)
