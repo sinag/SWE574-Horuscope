@@ -228,7 +228,10 @@
                             </div>
                         </div>
                     {% endfor %}
+
                 </div>
+                                                                    <a href="{% url 'comment:comments' instance.id %}"
+                                           class="btn btn-outline-primary btn-sm"><span class="fas fa-comments"></span> View Comments</a>
             </div>
         </div>
     </div>
