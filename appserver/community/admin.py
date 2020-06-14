@@ -10,7 +10,6 @@ class CommunityAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_on', 'author', 'city')
     list_filter = ['name', 'author']
     search_fields = ['name', 'author']
-    readonly_fields = ['created_on']
 
 
 admin.site.register(Community, CommunityAdmin)
