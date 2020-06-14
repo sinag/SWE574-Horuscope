@@ -1,6 +1,6 @@
 window.annotationCandidate = { target: ""};
 window.savedAnnotations = [];
-
+window.savedAnnotationsFiltered =[];
 annotationServerPort = 81
 annotationServerRoot = "http://" + window.location.hostname + ":" + annotationServerPort
 

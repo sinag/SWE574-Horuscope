@@ -11,8 +11,7 @@
                 {% for instance in instances %}
                     <div class="card shadow-lg mb-3">
                         <div class="card text-center">
-                            <div class="card-header text-white bg-secondary">
-                                Created by {{ instance.author.username }} @ {{ instance.created_on }}
+                            <div class="card-header text-white bg-secondary"><a style="color: #fff" href="{% url 'instance:view' instance.id %}">Created by {{ instance.author.username }} @ {{ instance.created_on }}</a>
                             </div>
                             <div class="card-body">
                                 {% if instance.datatype.generic %}
