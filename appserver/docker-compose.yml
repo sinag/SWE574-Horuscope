@@ -22,3 +22,8 @@ services:
       - POSTGRES_USER=django
       - POSTGRES_PASSWORD=django
     container_name: appserver-db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
