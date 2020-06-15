@@ -108,5 +108,5 @@ class CommentsView(generic.ListView):
         return (
             Comment.objects
                 .select_related('created_by')
-                .filter(instance_id=self.kwargs.get('instance_id')).order_by('created_on')
+                .filter(instance_id=self.kwargs.get('instance_id')).order_by('-created_on')
         )

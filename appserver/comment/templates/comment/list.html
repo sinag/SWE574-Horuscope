@@ -3,37 +3,29 @@
 {% block content %}
     <div class="container">
         <div>
-            {% for comment in comments %}
+            {% for field in instance.fields %}
                 {% if forloop.counter == 1 %}
-                    <h4 style="border-bottom: 1px solid #CCC;font-size: 2rem;font-weight: 300;line-heig">
+                    <h4 style="border-bottom: 1px solid #CCC;font-size: 2.5rem;font-weight: 300;line-height: 2;">
                         <small>Comments for <a
                                 href="{% url 'instance:view' instance.id %}">{% property_value instance.id field.id field.type %}</a></small>
                     </h4>
-                    {% for field in instance.fields %}
-                        {% if forloop.counter == 1 %}
-                            <h4 style="border-bottom: 1px solid #CCC;font-size: 2.5rem;font-weight: 300;line-height: 2;">
-                                <small>Comments for <a
-                                        href="{% url 'instance:view' comment.instance.id %}">{% property_value comment.instance.id field.id field.type %}</a></small>
-                            </h4>
-                        {% endif %}
-                    {% endfor %}
-                    <p class="post-details"><i class="fa fa-folder"></i> Post Type: {{ comment.instance.datatype.name }}
-                    </p>
-                    <p class="post-details"><i class="fa fa-user"></i> Author: <a
-                            href="{% url 'users:view' comment.instance.author.id %}">{{ comment.instance.author.username }}</a>
-                    <p class="post-details"><i class="fa fa-calendar"></i> Posted on {{ comment.instance.created_on }}
-                    </p>
-                    <p class="post-details"><i class="fa fa-tags"></i>Tags:
-                        {% for field in comment.instance.fields %}
-                            {% if field.name == 'Semantic Tags' %}
-                                <span class="semantic-tags">{% property_value comment.instance.id field.id field.type %} </span>
-                            {% endif %}
-                        {% endfor %}
-                    </p>
                 {% endif %}
             {% endfor %}
+            <p class="post-details"><i class="fa fa-folder"></i> Post Type: {{ instance.datatype.name }}
+            </p>
+            <p class="post-details"><i class="fa fa-user"></i> Author: <a
+                    href="{% url 'users:view' instance.author.id %}">{{ instance.author.username }}</a>
+            <p class="post-details"><i class="fa fa-calendar"></i> Posted on {{ instance.created_on }}
+            </p>
+            <p class="post-details"><i class="fa fa-tags"></i>Tags:
+                {% for field in instance.fields %}
+                    {% if field.name == 'Semantic Tags' %}
+                        <span class="semantic-tags">{% property_value instance.id field.id field.type %} </span>
+                    {% endif %}
+                {% endfor %}
+            </p>
         </div>
-        <h2 style="margin-bottom: 1em; font-size: 1.5rem;"><small class="text-muted"
+        <h2 style="margin-bottom: 1em"><small class="text-muted"
                                               style="line-height: 1.5">{{ comments.count }} comment(s)</small>
         </h2>
         {% if comments %}
@@ -80,7 +72,7 @@
         {% endif %}
     </div>
     <div>
-    <br>
+        <br>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
