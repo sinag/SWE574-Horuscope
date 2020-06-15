@@ -5,7 +5,7 @@
         <div>
             {% for field in instance.fields %}
                 {% if forloop.counter == 1 %}
-                    <h4 style="border-bottom: 1px solid #CCC;font-size: 2.5rem;font-weight: 300;line-height: 2;">
+                    <h4 style="border-bottom: 1px solid #CCC;font-size: 1.5rem;font-weight: 300;line-height: 2;">
                         <small>Comments for <a
                                 href="{% url 'instance:view' instance.id %}">{% property_value instance.id field.id field.type %}</a></small>
                     </h4>
@@ -26,7 +26,7 @@
             </p>
         </div>
         <h2 style="margin-bottom: 1em"><small class="text-muted"
-                                              style="line-height: 1.5">{{ comments.count }} comment(s)</small>
+                                              style="font-size: 1rem;">{{ comments.count }} comment(s)</small>
         </h2>
         {% if comments %}
             {% for comment in comments %}
