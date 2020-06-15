@@ -36,7 +36,7 @@ class CommunityIndexViewTests(TestCase):
         community index page
         """
         user = create_test_user("test_user", "Passw0rd1")
-        create_community(name="Test Community Name", description="Test Community Description", user=user)
+        create_community(name="Test Community Name", description="Test Community Description", author=user)
         response = self.client.get(reverse('community:index'))
         self.assertQuerysetEqual(
             response.context['communities'],
