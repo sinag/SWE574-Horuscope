@@ -49,7 +49,7 @@ def create_instance_activity(sender, instance, created, **kwargs):
     ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
                                         "created new post under community '" + instance.datatype.community.name + "'\", \"type\": \"Create Post\", \"actor\": "
                                         "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
-                                        "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.id) + "\", \"target\": "
+                                        "\"http://" + SERVER_ADDRESS + "/instance/" + str(instance.id) + "\", \"target\": "
                                         "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")
 
 
@@ -58,5 +58,5 @@ def delete_instance_activity(sender, instance, **kwargs):
     ActivityStream.objects.create(data="{\"@context\": \"https://www.w3.org/ns/activitystreams\", \"summary\": \"" + instance.author.username + " "
                                        "deleted a post under community '" + instance.datatype.community.name + "'\", \"type\": \"Delete Post\", \"actor\": "
                                        "\"http://" + SERVER_ADDRESS + "/users/view/" + str(instance.author_id) + "\", \"object\": "
-                                       "\"http://" + SERVER_ADDRESS + "/comments/" + str(instance.id) + "\", \"target\": "
+                                       "\"http://" + SERVER_ADDRESS + "/instance/" + str(instance.id) + "\", \"target\": "
                                        "\"http://" + SERVER_ADDRESS + "/communities/" + str(instance.datatype.community.id) + "\", \"published\": \"" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\"}")

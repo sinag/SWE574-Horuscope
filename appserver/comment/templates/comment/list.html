@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
+{% load comment_tags %}
 {% block content %}
     <div class="container">
-        <h2 style="margin-bottom: 1em">Comments <small class="float-right text-muted"
-                                                       style="line-height: 1.5">{{ comments.count }} comment(s)</small>
+        <div>
+            {% for comment in comments %}
+                {% if forloop.counter == 1 %}
+                    {% for field in instance.fields %}
+                        {% if forloop.counter == 1 %}
+                            <h4 style="border-bottom: 1px solid #CCC;font-size: 2.5rem;font-weight: 300;line-height: 2;">
+                                <small>Comments for <a
+                                        href="{% url 'instance:view' comment.instance.id %}">{% property_value comment.instance.id field.id field.type %}</a></small>
+                            </h4>
+                        {% endif %}
+                    {% endfor %}
+                    <p class="post-details"><i class="fa fa-folder"></i> Post Type: {{ comment.instance.datatype.name }}
+                    </p>
+                    <p class="post-details"><i class="fa fa-user"></i> Author: <a
+                            href="{% url 'users:view' comment.instance.author.id %}">{{ comment.instance.author.username }}</a>
+                    <p class="post-details"><i class="fa fa-calendar"></i> Posted on {{ comment.instance.created_on }}
+                    </p>
+                    <p class="post-details"><i class="fa fa-tags"></i>Tags:
+                        {% for field in comment.instance.fields %}
+                            {% if field.name == 'Semantic Tags' %}
+                                <span class="semantic-tags">{% property_value comment.instance.id field.id field.type %} </span>
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <h2 style="margin-bottom: 1em"><small class="text-muted"
+                                              style="line-height: 1.5">{{ comments.count }} comment(s)</small>
         </h2>
         {% if comments %}
             {% for comment in comments %}
@@ -43,9 +71,12 @@
             {% endfor %}
         {% endif %}
         {% if request.user.is_authenticated %}
-        <a href="{% url 'comment:create' instance.id %}" class="btn btn-outline-primary btn-block"><i
-                class="fa fa-plus"></i> New Comment</a>
+            <a href="{% url 'comment:create' instance.id %}" class="btn btn-outline-primary btn-block"><i
+                    class="fa fa-plus"></i> New Comment</a>
         {% endif %}
+    </div>
+    <div>
+    <br>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
